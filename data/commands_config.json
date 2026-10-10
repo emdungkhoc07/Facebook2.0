@@ -1,0 +1,148 @@
+{
+  "tool2_ai_auto_reply": {
+    "commands": {
+      "help": [
+        "/help",
+        "/!help"
+      ],
+      "ai": [
+        "/ai",
+        "/!ai"
+      ],
+      "model": [
+        "/model",
+        "/!model"
+      ],
+      "delete": [
+        "/delete",
+        "/!delete",
+        "/xoa",
+        "/!xoa"
+      ],
+      "star": [
+        "/star",
+        "/!star",
+        "/start",
+        "/!start",
+        "/bat",
+        "/!bat",
+        "/on",
+        "/!on"
+      ],
+      "stop": [
+        "/stop",
+        "/!stop",
+        "/tat",
+        "/!tat",
+        "/off",
+        "/!off"
+      ]
+    },
+    "notifications": {
+      "delete_success": "🧹 Đã xóa sạch ngữ cảnh đoạn chat!",
+      "star_success": "⭐ Đã BẬT tự động trả lời cho cuộc trò chuyện này. Mọi tin nhắn tiếp theo sẽ được AI tự động phản hồi mà không cần lệnh /ai.",
+      "stop_success": "🛑 Đã TẮT tự động trả lời cho cuộc trò chuyện này.",
+      "model_success": "✅ Đã đổi model sang: {model}",
+      "model_info": "ℹ️ Model hiện tại: {model}. Cú pháp: /model <tên_model>",
+      "ai_error": "❌ Lỗi Gemini AI: {error}",
+      "help_text": "📋 [DANH SÁCH LỆNH AI AUTO REPLY]:\n• /help : Xem lại các lệnh\n• /ai [nội dung] : Nhắn nội dung này cho AI đọc và trả lời\n• /model [tên_model] : Tùy chỉnh sang model khác\n• /delete : Xóa dữ liệu đoạn chat với AI\n• /star hoặc /start : Bật chế độ cho AI tự động đọc và trả lời tin nhắn không cần lệnh /ai\n• /stop : Tắt chế độ tự động đọc tin nhắn"
+    }
+  },
+  "tool7_web_in_mess": {
+    "commands": {
+      "open_url": [
+        "/web:",
+        "/!web:",
+        "/url:"
+      ],
+      "grid_click": [
+        "/<coord>"
+      ],
+      "grid_drag": [
+        "/<from>-<to>"
+      ],
+      "input_text": [
+        "/[text]"
+      ],
+      "press_enter": [
+        "/![enter]",
+        "/[enter]"
+      ],
+      "press_delete": [
+        "/![delete]",
+        "/[delete]"
+      ],
+      "press_delete_count": [
+        "/![delete]x{count}",
+        "/[delete]x{count}"
+      ],
+      "find_text": [
+        "/tim:",
+        "/!tim:",
+        "/find:",
+        "/!find:"
+      ],
+      "capture_page": [
+        "/cap",
+        "/!cap",
+        "/capture",
+        "/!capture"
+      ],
+      "extract_images": [
+        "/@!#{count}",
+        "/@#{count}",
+        "/#{count}",
+        "/anh:{count}",
+        "/img:{count}"
+      ],
+      "extract_static_images": [
+        "/@!##{count}",
+        "/@##{count}",
+        "/##{count}",
+        "/anh2:{count}",
+        "/img2:{count}",
+        "/staticimg:{count}"
+      ],
+      "clear_image_cache": [
+        "/@!#clear",
+        "/@#clear",
+        "/#clear",
+        "/anh:clear",
+        "/img:clear"
+      ],
+      "reset_viewport": [
+        "/web!reset",
+        "/web:reset"
+      ],
+      "navigate_back": [
+        "/web!<",
+        "/web:back"
+      ],
+      "navigate_forward": [
+        "/web!>",
+        "/web:forward"
+      ],
+      "clear_all_data": [
+        "/!webdelete",
+        "/webdelete",
+        "/web!delete"
+      ]
+    },
+    "notifications": {
+      "status_opening_url": "🌐 Đang mở: {url}...",
+      "status_clicking": "🖱️ Click ô {coord}...",
+      "status_dragging": "↔️ Vuốt kéo từ {from} đến {to}...",
+      "status_typing": "⌨️ Đang gõ văn bản...",
+      "status_enter": "↵ Đang gửi phím Enter...",
+      "status_delete": "⌫ Đang xóa ký tự...",
+      "status_finding": "🔍 Tìm kiếm từ khóa: {keyword}...",
+      "status_capturing": "📸 Đang chụp ảnh màn hình...",
+      "status_extracting_images": "🖼️ Đang cào {count} ảnh siêu tốc...",
+      "status_images_done": "✅ Đã tải và gửi thành công {count} ảnh!",
+      "status_clearing_cache": "🧹 Đã xóa sạch bộ nhớ cache ảnh đã gửi!",
+      "status_clearing_all_data": "🗑️ Đã xóa 100% dữ liệu duyệt web, cookie và cache!",
+      "status_nav_back": "⬅️ Đang quay lại trang trước...",
+      "status_nav_forward": "➡️ Đang đi tới trang kế tiếp..."
+    }
+  }
+}

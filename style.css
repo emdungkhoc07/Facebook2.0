@@ -1,0 +1,1435 @@
+/* ==========================================================================
+   AUTOMESS - WHITE STATUS BAR, LEFT TOOLBAR & POPUP OVERLAY CONSOLES
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #ffffff;
+  color: #111827;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+}
+
+code, kbd, samp, pre {
+  font-family: ui-monospace, monospace;
+}
+
+/* 1. THANH TRẠNG THÁI MÀU TRẮNG (TOP TITLE BAR) */
+.white-title-bar {
+  height: 44px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 14px;
+  -webkit-app-region: drag;
+  z-index: 9999;
+}
+
+.title-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-logo {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-logo img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  display: block;
+}
+
+.app-title-text {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #0f172a;
+}
+
+/* NÚT ĐIỀU KHIỂN CỬA SỔ */
+.title-right-controls {
+  -webkit-app-region: no-drag;
+  display: flex;
+  height: 100%;
+}
+
+.win-btn {
+  width: 48px;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.win-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.win-btn.close-btn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+/* 2. THÂN ỨNG DỤNG (APP BODY) */
+.app-body {
+  flex: 1;
+  display: flex;
+  height: calc(100vh - 44px);
+  width: 100vw;
+  background: #ffffff;
+  position: relative;
+}
+
+/* 3. THANH CÔNG CỤ MÀU TRẮNG BÊN TRÁI (LEFT TOOLBAR) */
+.white-toolbar {
+  width: 60px;
+  height: 100%;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 8px;
+  z-index: 100;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.white-toolbar::-webkit-scrollbar {
+  width: 3px;
+}
+.white-toolbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+}
+
+.toolbar-divider {
+  width: 34px;
+  height: 1px;
+  background: #e5e7eb;
+  margin: 2px 0;
+  flex-shrink: 0;
+}
+
+.tool-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.tool-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.tool-btn.active {
+  background-color: #e0f2fe;
+  border-color: #bae6fd;
+}
+
+.tool-btn.active::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  width: 4px;
+  height: 26px;
+  border-radius: 0 4px 4px 0;
+  background: #0084FF;
+  box-shadow: 0 0 8px rgba(0, 132, 255, 0.5);
+}
+
+.tool-btn img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
+
+/* NÚT TOOL CON */
+.subtool-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  flex-shrink: 0;
+}
+
+.subtool-btn:hover {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.subtool-btn.active-toggle {
+  background-color: #ecfdf5;
+  border-color: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+}
+
+.subtool-btn.active-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.subtool-btn.console-active {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.subtool-btn img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  display: block;
+}
+
+/* 4. KHUNG CHỨA TOÀN CỬA SỔ */
+.main-container {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.tab-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background: #ffffff;
+  z-index: 10;
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
+.tab-view:not(.active) {
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.tab-view webview {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ==========================================================================
+   5. POPUP OVERLAY CONSOLE (LUÔN GIỮ VISIBLE TRONG GPU COMPOSITOR ĐỂ CHẠY NỀN SIÊU MƯỢT)
+   ========================================================================== */
+.console-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  user-select: text;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  pointer-events: none;
+  visibility: visible !important;
+  transform: scale(0.99);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.console-view.active {
+  z-index: 500;
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible !important;
+  transform: scale(1);
+}
+
+/* HEADER CỦA POPUP */
+.console-header {
+  padding: 10px 16px 8px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
+.console-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.console-title-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.console-title-text {
+  font-size: 19px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* NÚT SAVE CỦA TOOL 2 */
+.console-save-btn {
+  padding: 5px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #0084FF;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 132, 255, 0.25);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.console-save-btn:hover {
+  background-color: #0073e6;
+  box-shadow: 0 4px 12px rgba(0, 132, 255, 0.35);
+}
+
+.console-save-btn:active {
+  transform: scale(0.97);
+}
+
+/* BODY CỦA POPUP TOOL (THANH CUỘN NẰM SÁT CẠNH PHẢI GIAO DIỆN) */
+.console-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  height: calc(100% - 50px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 16px 24px 16px;
+}
+
+.console-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.console-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.console-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.console-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.console-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.section-label.label-red {
+  color: #dc2626;
+}
+
+.console-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  font-size: 13px;
+  color: #0f172a;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.console-input:focus {
+  background: #ffffff;
+  border-color: #0084FF;
+  box-shadow: 0 0 0 3px rgba(0, 132, 255, 0.12);
+}
+
+.console-textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #0f172a;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  resize: none;
+  line-height: 1.5;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.console-textarea:focus {
+  background: #ffffff;
+  border-color: #0084FF;
+  box-shadow: 0 0 0 3px rgba(0, 132, 255, 0.12);
+}
+
+.console-textarea.textarea-red {
+  border: 1.5px solid #ef4444;
+  background: #fffcfc;
+}
+
+.console-textarea.textarea-red:focus {
+  background: #ffffff;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.commands-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.commands-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 2px;
+}
+
+.command-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.cmd-badge {
+  font-weight: 700;
+  font-size: 12px;
+  color: #0066cc;
+  background: #e0f2fe;
+  padding: 2px 10px;
+  border-radius: 6px;
+  border: 1px solid #bae6fd;
+  min-width: 90px;
+  text-align: center;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.cmd-desc {
+  color: #475569;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   6. GIAO DIỆN TOOL 7 ("WEB IN MESS") - THANH TRẠNG THÁI TRÊN ĐẦU
+   ========================================================================== */
+/* BỘ NÚT ĐIỀU HƯỚNG TOOL 7 (<, >, F5, THÙNG RÁC) */
+.tool7-nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.tool7-nav-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.tool7-nav-btn:hover:not(:disabled) {
+  background: #0084FF;
+  border-color: #0084FF;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 132, 255, 0.3);
+}
+
+.tool7-nav-btn.btn-trash:hover:not(:disabled) {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);
+}
+
+.tool7-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* THANH NHẬP URL THỜI GIAN THỰC Y NHƯ TRÌNH DUYỆT THẬT */
+.tool7-url-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 3px 10px;
+  flex: 1;
+  min-width: 180px;
+  max-width: 380px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.tool7-url-bar-wrap:focus-within {
+  background: #ffffff;
+  border-color: #0084FF;
+  box-shadow: 0 0 0 3px rgba(0, 132, 255, 0.15);
+}
+
+.tool7-url-icon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.tool7-url-input {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 12px;
+  color: #0369a1;
+  font-weight: 600;
+  padding: 0;
+}
+
+.tool7-url-input::placeholder {
+  color: #94a3b8;
+  font-size: 11.5px;
+  font-weight: 400;
+}
+
+.tool7-url-pill {
+  font-size: 12px;
+  color: #0369a1;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  padding: 4px 12px;
+  border-radius: 20px;
+  max-width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+/* THANH TRẠNG THÁI NẰM TRÊN ĐẦU BÊN CẠNH URL */
+.tool7-status-pill {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f172a;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 120px;
+  max-width: 360px;
+  display: inline-block;
+}
+
+/* THANH TRẠNG THÁI THÔNG BÁO TOOL 2 (AI AUTO REPLY) */
+.tool2-status-pill {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0369a1;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 480px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.tool2-status-pill.status-processing {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.tool2-status-pill.status-success {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.tool2-status-pill.status-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+/* NÚT GẠT BẬT/TẮT LƯỚI CARO TOOL 7 */
+.tool7-grid-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #cbd5e1;
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tool7-toggle-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.ios-switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.ios-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.ios-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 20px;
+}
+
+.ios-slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.ios-switch input:checked + .ios-slider {
+  background-color: #0084FF;
+}
+
+.ios-switch input:checked + .ios-slider:before {
+  transform: translateX(18px);
+}
+
+/* NÚT GẠT CỠ LỚN (SENSOR CONSOLE & DỄ NHÌN) */
+.ios-switch.ios-switch-lg {
+  width: 52px;
+  height: 28px;
+}
+
+.ios-switch.ios-switch-lg .ios-slider {
+  border-radius: 28px;
+}
+
+.ios-switch.ios-switch-lg .ios-slider:before {
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.ios-switch.ios-switch-lg input:checked + .ios-slider:before {
+  transform: translateX(24px);
+}
+
+.tool7-console-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: calc(100% - 46px);
+  overflow: hidden !important;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+/* NÚT "!" NHỎ GỌN TRÊN THANH HEADER TOOL 7 */
+.tool7-help-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 1.5px solid #94a3b8;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  padding: 0;
+  line-height: 1;
+  user-select: none;
+}
+
+.tool7-help-btn:hover {
+  background: #0084FF;
+  border-color: #0084FF;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(0, 132, 255, 0.45);
+  transform: scale(1.08);
+}
+
+.tool7-help-btn:active {
+  transform: scale(0.96);
+}
+
+/* KHUNG TRÌNH DUYỆT TỰ NHIÊN FULL CHIỀU CAO VỪA VẶN MÀN HÌNH - VUÔNG VẮN 100% KHÔNG BO GÓC */
+.tool7-webview-wrapper {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  border: 1px solid #cbd5e1;
+  border-radius: 0 !important;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.tool7-webview-wrapper webview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0 !important;
+  z-index: 1;
+}
+
+/* LƯỚI CARO ĐỒNG BỘ 25 HÀNG VUÔNG (A..Y) x CÁC CỘT VUÔNG */
+.tool7-caro-grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: grid;
+  border-radius: 0 !important;
+  z-index: 10;
+}
+
+.tool7-caro-grid-overlay.hidden {
+  display: none !important;
+}
+
+.caro-grid-cell {
+  border: 0.5px solid rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #000000;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* POPUP MODAL BẢNG TỔNG HỢP LỆNH TOOL 7 */
+.tool7-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.tool7-modal-overlay.active {
+  display: flex;
+}
+
+.tool7-modal-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+  width: 100%;
+  max-width: 860px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #cbd5e1;
+  overflow: hidden;
+  animation: modalPop 0.15s ease-out;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.tool7-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.tool7-modal-title {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tool7-modal-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #0084FF;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.tool7-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #64748b;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  font-weight: 700;
+}
+
+.tool7-modal-close:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.tool7-modal-body {
+  padding: 14px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.tool7-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.tool7-modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.tool7-commands-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.tool7-commands-table th {
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1.5px solid #cbd5e1;
+  font-size: 12.5px;
+}
+
+.tool7-commands-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.tool7-commands-table tr:hover td {
+  background: #f8fafc;
+}
+
+.tool7-commands-table code {
+  color: #0369a1;
+  font-weight: 600;
+  background: #f0f9ff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #e0f2fe;
+}
+
+/* ========================================================================== */
+/* CUSTOM STYLED GEMINI 3.0+ MODEL SELECTOR (TOOL 2) */
+/* ========================================================================== */
+.tool2-custom-select {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+.tool2-select-trigger {
+  width: 100%;
+  min-height: 42px;
+  padding: 7px 12px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.tool2-select-trigger:hover {
+  border-color: #3b82f6;
+  background: #f8fafc;
+}
+
+.tool2-select-trigger:focus,
+.tool2-custom-select.active .tool2-select-trigger {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.tool2-selected-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool2-selected-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.tool2-selected-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool2-select-chevron {
+  color: #64748b;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.tool2-custom-select.active .tool2-select-chevron {
+  transform: rotate(180deg);
+  color: #2563eb;
+}
+
+.tool2-select-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px -4px rgba(15, 23, 42, 0.14), 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+  z-index: 1000;
+  display: none;
+  overflow: hidden;
+  animation: tool2DropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tool2DropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tool2-custom-select.active .tool2-select-dropdown {
+  display: block;
+}
+
+.tool2-dropdown-header {
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tool2-model-count {
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.tool2-dropdown-list {
+  max-height: 230px;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.tool2-dropdown-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tool2-dropdown-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.tool2-dropdown-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.tool2-dropdown-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.tool2-model-item {
+  padding: 9px 12px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+}
+
+.tool2-model-item:hover {
+  background: #f1f5f9;
+}
+
+.tool2-model-item.selected {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.tool2-model-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.tool2-model-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.tool2-model-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tool2-model-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.tool2-model-item.selected .tool2-model-name {
+  color: #1d4ed8;
+}
+
+.tool2-model-badges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tool2-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  line-height: 1.3;
+}
+
+.tool2-badge-version {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.tool2-badge-flash {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.tool2-badge-pro {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.tool2-badge-lite {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.tool2-model-check {
+  color: #2563eb;
+  font-size: 15px;
+  font-weight: 800;
+  display: none;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.tool2-model-item.selected .tool2-model-check {
+  display: block;
+}
+
+.tool2-dropdown-empty {
+  padding: 24px 16px;
+  text-align: center;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* CONSOLE SENSOR: 8 NÚT CHỌN MỨC GIỚI HẠN THẺ DANH BẠ (0 - 7) */
+.sensor-limit-btn {
+  min-width: 48px;
+  height: 48px;
+  padding: 0 16px;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  color: #1e293b;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sensor-limit-btn:hover {
+  background: #f1f5f9;
+  border-color: #10b981;
+  color: #059669;
+  transform: translateY(-2px);
+}
+
+.sensor-limit-btn.active {
+  background: #10b981;
+  border-color: #059669;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+  transform: scale(1.08);
+}
+
+/* ========================================================================== */
+/* MÀN HÌNH KHÓA BẢO MẬT TOÀN DIỆN (FULL SCREEN LOCK OVERLAY - PURE WHITE) */
+/* ========================================================================== */
+.screen-lock-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999999;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  user-select: none;
+}
+
+.screen-lock-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.screen-lock-card {
+  background: #ffffff;
+  border: none;
+  box-shadow: none;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 620px;
+  width: 92%;
+  text-align: center;
+  position: relative;
+}
+
+.screen-lock-icon-wrap {
+  width: 90px;
+  height: 90px;
+  background: #f0fdf4;
+  border: 2px solid #86efac;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #16a34a;
+  margin-bottom: 36px;
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.12);
+}
+
+.pin-inputs-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.pin-digit-input {
+  width: 72px;
+  height: 72px;
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 2.5px solid #cbd5e1;
+  border-radius: 16px;
+  font-size: 36px;
+  font-weight: 800;
+  color: #0f172a;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  -moz-appearance: textfield;
+  transform: none !important;
+}
+
+.pin-digit-input.console-pin-digit {
+  width: 58px;
+  height: 58px;
+  font-size: 30px;
+  border-radius: 14px;
+}
+
+.pin-digit-input::-webkit-outer-spin-button,
+.pin-digit-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.pin-digit-input:focus {
+  border-color: #16a34a;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.22);
+  transform: none !important;
+}
+
+.pin-digit-input.has-value {
+  border-color: #16a34a;
+  background: #ffffff;
+}
+
+.pin-digit-input.error {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.22) !important;
+}
+
+.pin-inputs-row.shake {
+  animation: pinShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes pinShake {
+  10%, 90% { transform: translate3d(-3px, 0, 0); }
+  20%, 80% { transform: translate3d(5px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-7px, 0, 0); }
+  40%, 60% { transform: translate3d(7px, 0, 0); }
+}
+
+.pin-status-msg {
+  font-size: 16px;
+  font-weight: 700;
+  min-height: 24px;
+  margin-top: 6px;
+  color: #ef4444;
+  transition: all 0.2s ease;
+}
+
+.pin-status-msg.success {
+  color: #16a34a;
+}

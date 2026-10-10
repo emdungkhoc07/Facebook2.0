@@ -1,0 +1,3050 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automess</title>
+  <link rel="icon" href="mess.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body spellcheck="false">
+
+  <!-- 1. THANH TRẠNG THÁI MÀU TRẮNG TRÊN CÙNG -->
+  <div class="white-title-bar">
+    <div class="title-left">
+      <div class="app-logo">
+        <img src="mess.svg" width="30" height="30" alt="Logo" />
+      </div>
+      <span class="app-title-text">Automess</span>
+    </div>
+
+    <!-- NÚT ĐIỀU KHIỂN CỬA SỔ (THU ẨN, TOÀN MÀN HÌNH, ĐÓNG) -->
+    <div class="title-right-controls">
+      <button id="btn-minimize" class="win-btn">
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <rect y="5" width="12" height="1.5" fill="currentColor"></rect>
+        </svg>
+      </button>
+      
+      <button id="btn-maximize" class="win-btn">
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <rect x="1" y="1" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.2"></rect>
+        </svg>
+      </button>
+      
+      <button id="btn-close" class="win-btn close-btn">
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <polygon fill="currentColor" points="11,1.7 10.3,1 6,5.3 1.7,1 1,1.7 5.3,6 1,10.3 1.7,11 6,6.7 10.3,11 11,10.3 6.7,6"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. THÂN ỨNG DỤNG -->
+  <div class="app-body">
+    <!-- THANH CÔNG CỤ MÀU TRẮNG BÊN TRÁI -->
+    <div class="white-toolbar">
+      <!-- NỀN TẢNG 1: MESSENGER -->
+      <button id="btn-tab-messenger" class="tool-btn active" title="Messenger (Chuột phải để tải lại - F5)">
+        <img src="mess.svg" alt="Messenger" />
+      </button>
+
+      <!-- NỀN TẢNG 2: FACEBOOK -->
+      <button id="btn-tab-facebook" class="tool-btn" title="Facebook (Chuột phải để tải lại - F5)">
+        <img src="fb.svg" alt="Facebook" />
+      </button>
+
+      <!-- NỀN TẢNG 3: TIKTOK -->
+      <button id="btn-tab-tiktok" class="tool-btn" title="TikTok (Chuột phải để tải lại - F5)">
+        <img src="tiktok.svg" alt="TikTok" />
+      </button>
+
+      <!-- NỀN TẢNG 4: INSTAGRAM -->
+      <button id="btn-tab-instagram" class="tool-btn" title="Instagram (Chuột phải để tải lại - F5)">
+        <img src="instagram.svg" alt="Instagram" />
+      </button>
+
+      <!-- VẠCH PHÂN CÁCH -->
+      <div class="toolbar-divider"></div>
+
+      <!-- CÁC TOOL CON -->
+      <button id="subtool-1" class="subtool-btn">
+        <img src="assets/1.svg" alt="Tool 1" />
+      </button>
+
+      <!-- TOOL 2: AI AUTO REPLY (CLICK PHẢI MỞ/ĐÓNG POPUP CONSOLE) -->
+      <button id="subtool-2" class="subtool-btn">
+        <img src="assets/2.svg" alt="Tool 2" />
+      </button>
+
+      <button id="subtool-3" class="subtool-btn">
+        <img src="assets/3.svg" alt="Tool 3" />
+      </button>
+
+      <button id="subtool-4" class="subtool-btn">
+        <img src="assets/4.svg" alt="Tool 4" />
+      </button>
+
+      <button id="subtool-6" class="subtool-btn">
+        <img src="assets/6.svg" alt="Tool 6" />
+      </button>
+
+      <button id="subtool-7" class="subtool-btn">
+        <img src="assets/7.svg" alt="Tool 7" />
+      </button>
+
+      <!-- TOOL 7: WEB IN MESS (TRẠNG THÁI NẠP TỰ ĐỘNG THEO DATATOOL.JSON, CLICK PHẢI MỞ CONSOLE) -->
+      <button id="subtool-8" class="subtool-btn">
+        <img src="assets/8.svg" alt="Web in Mess" />
+      </button>
+
+      <!-- TOOL CON: LOCK -->
+      <button id="subtool-lock" class="subtool-btn" title="Khóa">
+        <img src="assets/lock.svg" alt="Lock" />
+      </button>
+
+      <!-- TOOL CON: SENSOR (BẬT/TẮT CẢM BIẾN) -->
+      <button id="subtool-sensor" class="subtool-btn active-toggle" title="Cảm biến">
+        <img src="assets/sensor.svg" alt="Sensor" />
+      </button>
+    </div>
+
+    <!-- KHUNG CHỨA TOÀN CỬA SỔ -->
+    <div class="main-container">
+      <!-- TAB 1: MESSENGER (KHÓA CỨNG Ở MESSENGER.COM) -->
+      <div id="tab-messenger" class="tab-view active">
+        <webview 
+          id="view-messenger" 
+          src="https://www.messenger.com/" 
+          partition="persist:messenger" 
+          preload="../preload/preload-messenger.js"
+          webpreferences="backgroundThrottling=no"
+          useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+          allowpopups>
+        </webview>
+      </div>
+
+      <!-- TAB 2: FACEBOOK (TỰ DO LƯỚT FACEBOOK.COM 100%) -->
+      <div id="tab-facebook" class="tab-view">
+        <webview 
+          id="view-facebook" 
+          src="https://www.facebook.com/" 
+          partition="persist:facebook" 
+          preload="../preload/preload-facebook.js"
+          webpreferences="backgroundThrottling=no"
+          useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+          allowpopups>
+        </webview>
+      </div>
+
+      <!-- TAB 3: TIKTOK (TỰ DO LƯỚT TIKTOK.COM - NẠP SẴN NGẦM & TỰ ĐỘNG DỪNG VIDEO BAN ĐẦU) -->
+      <div id="tab-tiktok" class="tab-view">
+        <webview 
+          id="view-tiktok" 
+          src="https://www.tiktok.com/" 
+          partition="persist:tiktok" 
+          preload="../preload/preload-tiktok.js"
+          webpreferences="backgroundThrottling=no"
+          useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+          allowpopups>
+        </webview>
+      </div>
+
+      <!-- TAB 4: INSTAGRAM (TỰ DO LƯỚT INSTAGRAM.COM 100%) -->
+      <div id="tab-instagram" class="tab-view">
+        <webview 
+          id="view-instagram" 
+          src="https://www.instagram.com/" 
+          partition="persist:instagram" 
+          preload="../preload/preload-instagram.js"
+          webpreferences="backgroundThrottling=no"
+          useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+          allowpopups>
+        </webview>
+      </div>
+
+      <!-- POPUP OVERLAY CONSOLE TOOL 2: AI AUTO REPLY -->
+      <div id="view-console-tool-2" class="console-view">
+        <div class="console-header">
+          <div class="console-title-wrap">
+            <img src="assets/2.svg" class="console-title-icon" alt="AI auto reply" />
+            <h1 class="console-title-text">AI auto reply</h1>
+            <span id="tool2-status-text" class="tool2-status-pill">⚡ Sẵn sàng nhận tin nhắn & lệnh AI...</span>
+          </div>
+          <button id="btn-save-console-tool-2" class="console-save-btn">Save</button>
+        </div>
+
+        <div class="console-body">
+          <div class="console-section">
+            <label class="section-label" for="tool2-api-key">API Key (Google Gemini)</label>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="text" id="tool2-api-key" class="console-input" placeholder="Nhập API Key Gemini (AIzaSy...)" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" />
+              <span id="tool2-api-check-result" style="display: none; font-size: 18px; line-height: 1; flex-shrink: 0;"></span>
+              <button id="btn-check-tool2-api" class="console-check-btn" type="button" style="padding: 6px 14px; background: #0ea5e9; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; white-space: nowrap;">Kiểm tra Key</button>
+            </div>
+            <div id="tool2-api-status" style="margin-top: 6px; font-size: 12px; line-height: 1.4; display: none; padding: 8px; border-radius: 6px;"></div>
+          </div>
+
+          <div class="console-section">
+            <label class="section-label" for="tool2-model-select">
+              Model Gemini khả dụng (&ge; 3.0)
+            </label>
+            <div class="tool2-custom-select" id="tool2-custom-select">
+              <div class="tool2-select-trigger" id="tool2-select-trigger" tabindex="0">
+                <div class="tool2-selected-info">
+                  <span class="tool2-selected-text" id="tool2-selected-text">-- Nhập Key & Bấm Kiểm tra Key --</span>
+                </div>
+                <svg class="tool2-select-chevron" viewBox="0 0 24 24" width="16" height="16">
+                  <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="tool2-select-dropdown" id="tool2-select-dropdown">
+                <div class="tool2-dropdown-header">
+                  <span>CHỌN MODEL GEMINI 3.0+</span>
+                  <span class="tool2-model-count" id="tool2-model-count">0 model</span>
+                </div>
+                <div class="tool2-dropdown-list" id="tool2-dropdown-list">
+                  <div class="tool2-dropdown-empty">Chưa có danh sách Model.<br>Vui lòng nhập API Key và bấm <strong>Kiểm tra Key</strong>.</div>
+                </div>
+              </div>
+              <select id="tool2-model-select" style="display: none;"></select>
+            </div>
+          </div>
+
+          <div class="console-section">
+            <label class="section-label" for="tool2-whoami">Tôi là ai ?</label>
+            <textarea id="tool2-whoami" class="console-textarea" placeholder="Tên, xưng hô thế nào, thái độ, cá tính, phong cách, thói quen ...." spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+          </div>
+
+          <div class="console-section">
+            <label class="section-label label-red" for="tool2-discipline">Kỉ luật</label>
+            <textarea id="tool2-discipline" class="console-textarea textarea-red" placeholder="Khi gặp ai, thấy tin nhắn gì ... phải thế nào, không được thế nào ..." spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+          </div>
+
+          <div class="console-section">
+            <label class="section-label" for="tool2-blacklist" style="color: #f59e0b; display: flex; justify-content: space-between; align-items: center;">
+              <span>Bộ lọc danh bạ bỏ qua (Blacklist)</span>
+              <span style="font-size: 11px; font-weight: normal; color: #9ca3af;">Tuyệt đối không click & không đọc</span>
+            </label>
+            <textarea id="tool2-blacklist" class="console-textarea" placeholder="Nhập tên người dùng hoặc nhóm chat cần bỏ qua (ngăn cách bằng dấu phẩy hoặc xuống dòng)...&#10;Ví dụ: GCC, Người lạ, Nhóm gia đình, Shop Bán Hàng" spellcheck="false" autocorrect="off" autocapitalize="off" style="border-color: rgba(245, 158, 11, 0.4);"></textarea>
+          </div>
+
+          <div class="commands-card">
+            <div class="commands-card-title">Danh sách các lệnh hỗ trợ:</div>
+            <div class="command-row"><span class="cmd-badge">/help</span><span class="cmd-desc">xem lại các lệnh</span></div>
+            <div class="command-row"><span class="cmd-badge">/ai</span><span class="cmd-desc">nhắn nội dung này cho ai đọc và trả lời</span></div>
+            <div class="command-row"><span class="cmd-badge">/model</span><span class="cmd-desc">tùy chỉnh sang model khác</span></div>
+            <div class="command-row"><span class="cmd-badge">/delete</span><span class="cmd-desc">xóa dữ liệu đoạn chat với ai</span></div>
+            <div class="command-row"><span class="cmd-badge">/start, /star</span><span class="cmd-desc">bật chế độ cho ai tự động đọc và trả lời tin nhắn không cần lệnh</span></div>
+            <div class="command-row"><span class="cmd-badge">/stop</span><span class="cmd-desc">tắt chế độ cho ai tự động đọc tin nhắn</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POPUP OVERLAY CONSOLE TOOL 7: WEB IN MESS (HIỂN THỊ WEB THẬT TRỰC TUYẾN KÈM LƯỚI CARO) -->
+      <div id="view-console-tool-8" class="console-view">
+        <div class="console-header">
+          <div class="console-title-wrap">
+            <img src="assets/8.svg" class="console-title-icon" alt="Web in Mess" />
+            <h1 class="console-title-text">Web in Mess</h1>
+            <button id="btn-tool7-help" class="tool7-help-btn" title="Bảng tổng hợp lệnh Tool 7">!</button>
+
+            <!-- BỘ 4 NÚT ĐIỀU HƯỚNG: QUAY LẠI (<), ĐI TỚI (>), TẢI LẠI (F5), THÙNG RÁC XÓA DỮ LIỆU -->
+            <div class="tool7-nav-btns">
+              <button id="btn-tool7-back" class="tool7-nav-btn" title="Quay lại trang trước đó (←)" disabled>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <button id="btn-tool7-forward" class="tool7-nav-btn" title="Đi tới trang kế tiếp (→)" disabled>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+              <button id="btn-tool7-reload" class="tool7-nav-btn" title="Tải lại trang (F5)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                </svg>
+              </button>
+              <button id="btn-tool7-clear-data" class="tool7-nav-btn btn-trash" title="Xóa sạch toàn bộ dữ liệu & cache của Tool 7">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+              </button>
+            </div>
+
+            <!-- THANH NHẬP URL THỜI GIAN THỰC Y NHƯ TRÌNH DUYỆT THẬT -->
+            <div class="tool7-url-bar-wrap">
+              <svg class="tool7-url-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <input type="text" id="tool7-current-url" class="tool7-url-input" placeholder="Nhập địa chỉ web hoặc tìm kiếm..." autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" />
+            </div>
+
+            <span id="tool7-status-text" class="tool7-status-pill">⚡ Sẵn sàng nhận lệnh điều khiển duyệt web...</span>
+          </div>
+          <div class="tool7-grid-toggle-wrap" title="Bật / Tắt hiển thị lưới caro trên giao diện web">
+            <span class="tool7-toggle-label">Lưới caro</span>
+            <label class="ios-switch">
+              <input type="checkbox" id="toggle-tool7-grid" checked>
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="tool7-console-body">
+          <!-- KHUNG WEBVIEW DESKTOP NGANG TỰ NHIÊN FULL CHIỀU CAO VỪA VẶN MÀN HÌNH KHÔNG BO GÓC -->
+          <div class="tool7-webview-wrapper">
+            <!-- TRÌNH DUYỆT THỜI GIAN THỰC -->
+            <webview 
+              id="web-in-mess-view" 
+              src="https://www.google.com/" 
+              partition="persist:web_in_mess" 
+              preload="../preload/preload-web-in-mess.js"
+              webpreferences="webSecurity=no, backgroundThrottling=no"
+              useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+              allowpopups>
+            </webview>
+
+            <!-- LƯỚI CARO VUÔNG MÀU ĐEN #000000 (POINTER-EVENTS: NONE ĐỂ CLICK ĐƯỢC WEB) -->
+            <div id="tool7-caro-grid-overlay" class="tool7-caro-grid-overlay"></div>
+          </div>
+        </div>
+
+        <!-- POPUP MODAL BẢNG TỔNG HỢP LỆNH TOOL 7 (NẰM Ở NÚT "!") -->
+        <div id="tool7-commands-modal" class="tool7-modal-overlay">
+          <div class="tool7-modal-card">
+            <div class="tool7-modal-header">
+              <div class="tool7-modal-title">
+                <span class="tool7-modal-badge">!</span>
+                <span>📋 Bảng Tổng Hợp Lệnh Điều Khiển Tool 7 ("Web in Mess")</span>
+              </div>
+              <button id="btn-close-tool7-help" class="tool7-modal-close" title="Đóng">✕</button>
+            </div>
+            <div class="tool7-modal-body">
+              <table class="tool7-commands-table">
+                <thead>
+                  <tr>
+                    <th style="width: 200px;">Cú Pháp Lệnh</th>
+                    <th>Chức Năng & Hành Động Trình Duyệt</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="cmd-badge">/web:&lt;url&gt;</span></td>
+                    <td>Mở trang web mới theo địa chỉ URL (VD: <code>/web:pinterest.com</code>, <code>/web:pixiv.net</code>, <code>/web:google.com</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/&lt;tọa_độ&gt;</span></td>
+                    <td>Click chuột trái chính xác vào ô tọa độ trên lưới caro (VD: <code>/a2</code>, <code>/b10</code>, <code>/k22</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/&lt;tđ1&gt;-&lt;tđ2&gt;</span></td>
+                    <td>Lướt / cuộn trang web mượt mà từ tọa độ 1 đến tọa độ 2 (VD: <code>/a2-w2</code>, <code>/u5-c5</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/[văn bản]</span></td>
+                    <td>Gõ nội dung văn bản vào ô tìm kiếm / ô nhập liệu đang chọn (VD: <code>/[genshin impact]</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/find</span> hoặc <span class="cmd-badge">/tim</span></td>
+                    <td>Tự động dò tìm thanh nhập liệu / ô tìm kiếm trên trang web và click chọn (Hỗ trợ: <code>/find</code>, <code>/!find</code>, <code>/tim</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/![delete]xN</span></td>
+                    <td>Nhấn phím xóa lùi Backspace (⌫) N lần liên tiếp để xóa ký tự (Hỗ trợ: <code>/![delete]x5</code>, <code>/[delete]x10</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/![delete]</span></td>
+                    <td>Nhấn phím xóa lùi Backspace (⌫) 1 lần (Hỗ trợ: <code>/![delete]</code>, <code>/[delete]</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/![enter]</span></td>
+                    <td>Nhấn phím Enter trên bàn phím để xác nhận tìm kiếm / submit form (Hỗ trợ: <code>/![enter]</code>, <code>/[enter]</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/cap</span></td>
+                    <td>Chụp lại màn hình web hiện tại kèm Lưới Caro Vuông</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/!cap</span></td>
+                    <td>Chụp lại màn hình web hiện tại sạch nguyên bản 100% (không có lưới)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/##&lt;N&gt;</span> hoặc <span class="cmd-badge">/##</span></td>
+                    <td><b>[Web tĩnh]</b> Cào N ảnh gốc trực tiếp từ thẻ DOM trên các trang web cơ bản (Hỗ trợ: <code>/##5</code>, <code>/##20</code>, <code>@!##10</code>, <code>@##10</code>, <code>/anh2:10</code>, <code>/img2:10</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/#&lt;N&gt;</span> hoặc <span class="cmd-badge">/#</span></td>
+                    <td><b>[Web bảo mật / Dynamic]</b> Cào N ảnh chất lượng cao (tự động cuộn nạp ảnh trên Pixiv/Pinterest/truyện tranh), lưu vào <code>data/</code> & gửi lên Messenger (Hỗ trợ: <code>/#5</code>, <code>/#20</code>, <code>@!#10</code>, <code>@#10</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/#clear</span></td>
+                    <td>Xóa sạch 100% lịch sử cache ảnh đã gửi để cào lại toàn bộ ảnh từ đầu trang (Hỗ trợ: <code>/#clear</code>, <code>@!#clear</code>, <code>@#clear</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/web!reset</span></td>
+                    <td>F5 tải lại trang web đang chạy trong Tool 7</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/web!&lt;</span></td>
+                    <td>Quay lại (←) trang trước đó trong lịch sử duyệt web</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/web!&gt;</span></td>
+                    <td>Đi tới (→) trang tiếp theo trong lịch sử duyệt web</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">/!webdelete</span></td>
+                    <td>Xóa sạch 100% toàn bộ dữ liệu duyệt web, cookie, phiên đăng nhập, cache & thư mục ảnh cào của Tool 7 (Hỗ trợ: <code>/!webdelete</code>, <code>/webdelete</code>, <code>/web!delete</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">Chuỗi lệnh liên tiếp</span></td>
+                    <td>Ghép nhiều lệnh trong 1 tin nhắn để chạy tự động toàn diện mà không gửi ảnh giữa chừng. Chỉ chụp/gửi ảnh sau khi bước cuối hoàn tất. (VD: <code>/find/[nahida]/![enter]/#20</code>, <code>/web:pinterest.com/find/[genshin]/![enter]/#15</code>, <code>/a5/![delete]x10/[anime]/![enter]/!cap</code>)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POPUP OVERLAY CONSOLE SENSOR: CẢM BIẾN -->
+      <div id="view-console-sensor" class="console-view">
+        <div class="console-header">
+          <div class="console-title-wrap">
+            <img src="assets/sensor.svg" class="console-title-icon" alt="Sensor" />
+            <h1 class="console-title-text">Cảm biến</h1>
+          </div>
+          <button id="btn-save-console-sensor" class="console-save-btn">Save</button>
+        </div>
+
+        <div class="console-body" style="padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto;">
+          <!-- MỤC 1: GIỚI HẠN THẺ DANH BẠ QUÉT TIN NHẮN -->
+          <div class="console-section">
+            <label class="section-label">
+              <span>Giới hạn thẻ danh bạ quét tin nhắn (0 - 7)</span>
+            </label>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-start; align-items: center; padding-top: 4px;" id="sensor-btn-group">
+              <button type="button" class="sensor-limit-btn" data-val="0">0</button>
+              <button type="button" class="sensor-limit-btn" data-val="1">1</button>
+              <button type="button" class="sensor-limit-btn" data-val="2">2</button>
+              <button type="button" class="sensor-limit-btn" data-val="3">3</button>
+              <button type="button" class="sensor-limit-btn" data-val="4">4</button>
+              <button type="button" class="sensor-limit-btn" data-val="5">5</button>
+              <button type="button" class="sensor-limit-btn" data-val="6">6</button>
+              <button type="button" class="sensor-limit-btn active" data-val="7">7</button>
+            </div>
+          </div>
+
+          <!-- MỤC 2: CHẶN CỬA SỔ MỞ LÊN (POPUPS) -->
+          <div class="console-section" style="flex-direction: row; justify-content: space-between; align-items: center; background: #f8fafc; padding: 16px 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <span style="font-size: 14.5px; font-weight: 600; color: #1e293b;">Chặn cửa sổ mở lên (Popups)</span>
+            <label class="ios-switch ios-switch-lg" title="Chặn cửa sổ mở lên (Popups)">
+              <input type="checkbox" id="toggle-sensor-block-popups" checked>
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+
+          <!-- MỤC 3: CHẶN TỰ ĐỘNG CHUYỂN HƯỚNG TRANG WEB -->
+          <div class="console-section" style="flex-direction: row; justify-content: space-between; align-items: center; background: #f8fafc; padding: 16px 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <span style="font-size: 14.5px; font-weight: 600; color: #1e293b;">Chặn tự động chuyển hướng trang web</span>
+            <label class="ios-switch ios-switch-lg" title="Chặn tự động chuyển hướng trang web">
+              <input type="checkbox" id="toggle-sensor-block-redirect" checked>
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- POPUP OVERLAY CONSOLE LOCK: KHÓA & ĐỔI MÃ PIN -->
+      <div id="view-console-lock" class="console-view">
+        <div class="console-header">
+          <div class="console-title-wrap">
+            <img src="assets/lock.svg" class="console-title-icon" alt="Lock" />
+            <h1 class="console-title-text">Đổi mã PIN khóa</h1>
+          </div>
+          <button id="btn-save-console-lock" class="console-save-btn">Save</button>
+        </div>
+
+        <div class="console-body" style="padding: 32px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; overflow-y: auto;">
+          <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+            <div id="console-pin-inputs-row" class="pin-inputs-row" style="margin-bottom: 8px; gap: 12px;">
+              <input type="text" maxlength="1" class="pin-digit-input console-pin-digit" data-idx="0" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+              <input type="text" maxlength="1" class="pin-digit-input console-pin-digit" data-idx="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+              <input type="text" maxlength="1" class="pin-digit-input console-pin-digit" data-idx="2" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+              <input type="text" maxlength="1" class="pin-digit-input console-pin-digit" data-idx="3" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+              <input type="text" maxlength="1" class="pin-digit-input console-pin-digit" data-idx="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+              <input type="text" maxlength="1" class="pin-digit-input console-pin-digit" data-idx="5" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+            </div>
+            <div id="console-lock-status-msg" style="font-size: 14px; font-weight: 700; min-height: 22px; margin-top: 8px; text-align: center;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================== -->
+  <!-- MÀN HÌNH KHÓA BẢO MẬT TOÀN DIỆN (FULL SCREEN LOCK OVERLAY - Z-INDEX 9999999) -->
+  <!-- ========================================================================== -->
+  <div id="screen-lock-overlay" class="screen-lock-overlay">
+    <div class="screen-lock-card">
+      <div class="screen-lock-icon-wrap">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      
+      <div id="pin-inputs-row" class="pin-inputs-row">
+        <input type="text" maxlength="1" class="pin-digit-input" data-idx="0" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+        <input type="text" maxlength="1" class="pin-digit-input" data-idx="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+        <input type="text" maxlength="1" class="pin-digit-input" data-idx="2" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+        <input type="text" maxlength="1" class="pin-digit-input" data-idx="3" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+        <input type="text" maxlength="1" class="pin-digit-input" data-idx="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+        <input type="text" maxlength="1" class="pin-digit-input" data-idx="5" inputmode="numeric" pattern="[0-9]*" autocomplete="off" />
+      </div>
+
+      <div id="pin-status-msg" class="pin-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- SCRIPT ĐIỀU KHIỂN CỬA SỔ, CHUYỂN TAB, CONSOLE TOOL & LÕI TỰ ĐỘNG TOOL 7 -->
+  <script>
+    // 1. Điều khiển cửa sổ chính (Thu nhỏ, phóng to, đóng)
+    document.getElementById('btn-minimize').addEventListener('click', () => {
+      if (window.electronAPI && window.electronAPI.minimizeWindow) window.electronAPI.minimizeWindow();
+    });
+
+    document.getElementById('btn-maximize').addEventListener('click', () => {
+      if (window.electronAPI && window.electronAPI.maximizeWindow) window.electronAPI.maximizeWindow();
+    });
+
+    document.getElementById('btn-close').addEventListener('click', () => {
+      if (window.electronAPI && window.electronAPI.closeWindow) window.electronAPI.closeWindow();
+    });
+
+    // 2. Chuyển đổi giữa các Nền tảng: Messenger, Facebook, TikTok, Instagram
+    const btnMessenger = document.getElementById('btn-tab-messenger');
+    const btnFacebook = document.getElementById('btn-tab-facebook');
+    const btnTiktok = document.getElementById('btn-tab-tiktok');
+    const btnInstagram = document.getElementById('btn-tab-instagram');
+
+    const tabMessenger = document.getElementById('tab-messenger');
+    const tabFacebook = document.getElementById('tab-facebook');
+    const tabTiktok = document.getElementById('tab-tiktok');
+    const tabInstagram = document.getElementById('tab-instagram');
+
+    const wvMessenger = document.getElementById('view-messenger');
+    const wvFacebook = document.getElementById('view-facebook');
+    const wvTiktok = document.getElementById('view-tiktok');
+    const wvInstagram = document.getElementById('view-instagram');
+
+    const consoleTool2 = document.getElementById('view-console-tool-2');
+    const subtool2Btn = document.getElementById('subtool-2');
+    const btnSaveConsole2 = document.getElementById('btn-save-console-tool-2');
+
+    const consoleTool8 = document.getElementById('view-console-tool-8');
+    const subtool8Btn = document.getElementById('subtool-8');
+
+    const consoleSensor = document.getElementById('view-console-sensor');
+    const subtoolSensorBtn = document.getElementById('subtool-sensor');
+    const btnSaveConsoleSensor = document.getElementById('btn-save-console-sensor');
+    const sensorBtnGroup = document.getElementById('sensor-btn-group');
+    const toggleSensorBlockPopups = document.getElementById('toggle-sensor-block-popups');
+    const toggleSensorBlockRedirect = document.getElementById('toggle-sensor-block-redirect');
+    let currentSensorLimit = 7;
+    let currentSensorBlockPopups = true;
+    let currentSensorBlockRedirect = true;
+    let isUserInitiatedTool7Nav = false;
+    let lastTool7UserInteraction = Date.now();
+
+    function markTool7UserAction() {
+      isUserInitiatedTool7Nav = true;
+      lastTool7UserInteraction = Date.now();
+    }
+
+    const tool7Webview = document.getElementById('web-in-mess-view');
+    const tool7UrlInput = document.getElementById('tool7-current-url');
+    const tool7UrlPill = tool7UrlInput; // Alias tương thích ngược
+    const tool7StatusText = document.getElementById('tool7-status-text');
+    const tool7CaroGridOverlay = document.getElementById('tool7-caro-grid-overlay');
+    const toggleTool7Grid = document.getElementById('toggle-tool7-grid');
+
+    const btnTool7Back = document.getElementById('btn-tool7-back');
+    const btnTool7Forward = document.getElementById('btn-tool7-forward');
+    const btnTool7Reload = document.getElementById('btn-tool7-reload');
+    const btnTool7ClearData = document.getElementById('btn-tool7-clear-data');
+
+    // ==========================================================================
+    // CƠ CHẾ KHÓA MÀN HÌNH BẢO MẬT TOÀN DIỆN (FULL SCREEN LOCK SYSTEM)
+    // ==========================================================================
+    const screenLockOverlay = document.getElementById('screen-lock-overlay');
+    const pinInputsRow = document.getElementById('pin-inputs-row');
+    const pinDigitInputs = document.querySelectorAll('#pin-inputs-row .pin-digit-input');
+    const pinStatusMsg = document.getElementById('pin-status-msg');
+    const subtoolLockBtn = document.getElementById('subtool-lock');
+    let isScreenLocked = false;
+    let currentScreenLockPin = "123456";
+
+    // 1. Hàm kích hoạt màn hình khóa
+    async function activateScreenLock(shouldSave = true) {
+      isScreenLocked = true;
+      if (screenLockOverlay) {
+        screenLockOverlay.classList.add('active');
+      }
+      if (subtoolLockBtn) {
+        subtoolLockBtn.classList.add('active-toggle');
+      }
+      closeAllConsoles();
+      clearPinInputs();
+      focusFirstPinInput();
+      if (pinStatusMsg) {
+        pinStatusMsg.innerText = '';
+        pinStatusMsg.className = 'pin-status-msg';
+      }
+
+      if (shouldSave) {
+        await setScreenLockState(true);
+      }
+    }
+
+    // 2. Hàm mở khóa màn hình
+    async function unlockScreen() {
+      isScreenLocked = false;
+      if (pinStatusMsg) {
+        pinStatusMsg.innerText = '✓ Đã mở khóa thành công!';
+        pinStatusMsg.className = 'pin-status-msg success';
+      }
+
+      setTimeout(async () => {
+        if (screenLockOverlay) {
+          screenLockOverlay.classList.remove('active');
+        }
+        if (subtoolLockBtn) {
+          subtoolLockBtn.classList.remove('active-toggle');
+        }
+        clearPinInputs();
+        await setScreenLockState(false);
+      }, 350);
+    }
+
+    // 3. Xóa các ô PIN
+    function clearPinInputs() {
+      const inputs = document.querySelectorAll('#pin-inputs-row .pin-digit-input');
+      inputs.forEach(inp => {
+        inp.value = '';
+        inp.classList.remove('has-value', 'error');
+      });
+    }
+
+    // 4. Focus ô đầu tiên
+    function focusFirstPinInput() {
+      setTimeout(() => {
+        const inputs = document.querySelectorAll('#pin-inputs-row .pin-digit-input');
+        if (inputs && inputs[0]) inputs[0].focus();
+      }, 100);
+    }
+
+    // 5. Lưu trạng thái khóa vào datatool.json
+    async function setScreenLockState(locked) {
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig && window.electronAPI.saveDataToolConfig) {
+        try {
+          const config = (await window.electronAPI.loadDataToolConfig()) || {};
+          if (!config.screenLock) config.screenLock = {};
+          config.screenLock.isLocked = locked;
+          if (!config.screenLock.pin) config.screenLock.pin = currentScreenLockPin;
+          
+          if (!config.subtoolsState) config.subtoolsState = {};
+          config.subtoolsState['subtool-lock'] = locked;
+          
+          await window.electronAPI.saveDataToolConfig(config);
+          console.log(`[ScreenLock] Đã lưu trạng thái khóa (${locked ? 'ĐÃ KHÓA' : 'MỞ KHÓA'}) vào datatool.json`);
+        } catch(e) {
+          console.error('[ScreenLock] Lỗi lưu trạng thái khóa:', e);
+        }
+      }
+    }
+
+    // 6. Xử lý nhập liệu 6 ô mã PIN trên màn hình khóa
+    pinDigitInputs.forEach((input, index) => {
+      // Chỉ nhận ký tự số 0-9
+      input.addEventListener('input', () => {
+        const val = input.value;
+        const digit = val.replace(/\D/g, '');
+
+        if (!digit) {
+          input.value = '';
+          input.classList.remove('has-value', 'error');
+          return;
+        }
+
+        // Lấy ký tự số cuối cùng nhập vào
+        input.value = digit.slice(-1);
+        input.classList.add('has-value');
+        input.classList.remove('error');
+
+        // Tự động chuyển sang ô kế tiếp nếu có
+        if (index < pinDigitInputs.length - 1) {
+          pinDigitInputs[index + 1].focus();
+        }
+
+        // Kiểm tra xem đã nhập đủ 6 số chưa
+        checkPinComplete();
+      });
+
+      // Xử lý phím Backspace, ArrowLeft, ArrowRight, Enter
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace') {
+          if (!input.value && index > 0) {
+            e.preventDefault();
+            pinDigitInputs[index - 1].value = '';
+            pinDigitInputs[index - 1].classList.remove('has-value', 'error');
+            pinDigitInputs[index - 1].focus();
+          } else {
+            input.value = '';
+            input.classList.remove('has-value', 'error');
+          }
+        } else if (e.key === 'ArrowLeft' && index > 0) {
+          pinDigitInputs[index - 1].focus();
+        } else if (e.key === 'ArrowRight' && index < pinDigitInputs.length - 1) {
+          pinDigitInputs[index + 1].focus();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          checkPinComplete();
+        }
+      });
+
+      // Xử lý dán mã PIN 6 số (Paste)
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+        const digits = pasteData.replace(/\D/g, '').slice(0, 6);
+        if (!digits) return;
+
+        for (let i = 0; i < pinDigitInputs.length; i++) {
+          if (i < digits.length) {
+            pinDigitInputs[i].value = digits[i];
+            pinDigitInputs[i].classList.add('has-value');
+            pinDigitInputs[i].classList.remove('error');
+          }
+        }
+
+        const nextFocus = Math.min(digits.length, pinDigitInputs.length - 1);
+        pinDigitInputs[nextFocus].focus();
+        checkPinComplete();
+      });
+    });
+
+    // 7. Kiểm tra mã PIN khi đủ 6 chữ số
+    async function checkPinComplete() {
+      const inputs = document.querySelectorAll('#pin-inputs-row .pin-digit-input');
+      let enteredPin = '';
+      let isFull = true;
+      inputs.forEach(inp => {
+        if (inp.value && /\d/.test(inp.value)) {
+          enteredPin += inp.value;
+        } else {
+          isFull = false;
+        }
+      });
+
+      if (!isFull || enteredPin.length !== 6) return;
+
+      // Nạp mã PIN từ cấu hình
+      let targetPin = currentScreenLockPin;
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig) {
+        try {
+          const config = await window.electronAPI.loadDataToolConfig();
+          if (config && config.screenLock && config.screenLock.pin) {
+            targetPin = String(config.screenLock.pin).trim();
+          }
+        } catch(e) {}
+      }
+
+      if (enteredPin === targetPin) {
+        unlockScreen();
+      } else {
+        // Sai mật khẩu
+        inputs.forEach(inp => inp.classList.add('error'));
+        if (pinInputsRow) {
+          pinInputsRow.classList.add('shake');
+          setTimeout(() => pinInputsRow.classList.remove('shake'), 500);
+        }
+        if (pinStatusMsg) {
+          pinStatusMsg.innerText = '❌ Mật khẩu không chính xác!';
+          pinStatusMsg.className = 'pin-status-msg';
+        }
+        setTimeout(() => {
+          clearPinInputs();
+          focusFirstPinInput();
+        }, 600);
+      }
+    }
+
+    // =============================================================
+    // NẠP NGAY LẬP TỨC CẤU HÌNH BẬT/TẮT TỪ DATATOOL.JSON (ĐỒNG BỘ 100% - KHÔNG DELAY / KHÔNG FLASH)
+    // =============================================================
+    function applyInitialSubtoolsState() {
+      try {
+        const config = (window.electronAPI && window.electronAPI.getInitialDataToolConfig) ? window.electronAPI.getInitialDataToolConfig() : null;
+        if (config) {
+          if (config.subtoolsState) {
+            const state = config.subtoolsState;
+            document.querySelectorAll('.subtool-btn').forEach((btn) => {
+              if (btn.id && state[btn.id] !== undefined) {
+                if (state[btn.id]) btn.classList.add('active-toggle');
+                else btn.classList.remove('active-toggle');
+              }
+            });
+            if (toggleTool7Grid && state['tool7-caro-grid'] !== undefined) {
+              toggleTool7Grid.checked = !!state['tool7-caro-grid'];
+            }
+          }
+
+          // Kiểm tra xem có đang bị khóa màn hình không
+          const isLockOn = (config.screenLock && config.screenLock.isLocked) || (config.subtoolsState && config.subtoolsState['subtool-lock']);
+          if (isLockOn) {
+            activateScreenLock(false);
+          }
+        }
+      } catch(e) {
+        console.warn('[InitState] Không thể nạp đồng bộ:', e);
+      }
+    }
+    applyInitialSubtoolsState();
+
+    // 25 CHỮ CÁI CHO 25 HÀNG VUÔNG (A..Y)
+    const ROW_LETTERS_25 = [
+      'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 
+      'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 
+      'U', 'V', 'W', 'X', 'Y'
+    ];
+    const NUM_ROWS = 25;
+
+    function renderConsoleCaroGrid() {
+      if (tool7CaroGridOverlay.classList.contains('hidden')) return;
+      const rect = tool7Webview.getBoundingClientRect();
+      const w = rect.width || tool7CaroGridOverlay.clientWidth || 1150;
+      const h = rect.height || tool7CaroGridOverlay.clientHeight || 600;
+
+      const cellSize = h / NUM_ROWS;
+      const numCols = Math.max(1, Math.round(w / cellSize));
+
+      tool7CaroGridOverlay.innerHTML = '';
+      tool7CaroGridOverlay.style.gridTemplateRows = `repeat(${NUM_ROWS}, 1fr)`;
+      tool7CaroGridOverlay.style.gridTemplateColumns = `repeat(${numCols}, 1fr)`;
+
+      for (let r = 0; r < NUM_ROWS; r++) {
+        const letter = ROW_LETTERS_25[r];
+        for (let c = 1; c <= numCols; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'caro-grid-cell';
+          cell.innerText = `${letter}${c}`;
+          tool7CaroGridOverlay.appendChild(cell);
+        }
+      }
+    }
+
+    function updateTool7GridVisibility() {
+      const isVisible = toggleTool7Grid ? toggleTool7Grid.checked : true;
+      if (isVisible) {
+        tool7CaroGridOverlay.classList.remove('hidden');
+        renderConsoleCaroGrid();
+      } else {
+        tool7CaroGridOverlay.classList.add('hidden');
+      }
+      try {
+        localStorage.setItem('tool7_show_grid', isVisible ? '1' : '0');
+      } catch (e) {}
+    }
+
+    if (toggleTool7Grid) {
+      try {
+        const saved = localStorage.getItem('tool7_show_grid');
+        if (saved !== null) {
+          toggleTool7Grid.checked = (saved === '1');
+        }
+      } catch (e) {}
+
+      updateTool7GridVisibility();
+      toggleTool7Grid.addEventListener('change', updateTool7GridVisibility);
+    }
+
+    window.addEventListener('resize', renderConsoleCaroGrid);
+
+    // Chuyển đổi mã tọa độ sang pixel chính xác
+    function coordToPixel(coordStr) {
+      if (!coordStr || coordStr.length < 2) return null;
+      const letter = coordStr[0].toUpperCase();
+      const colNum = parseInt(coordStr.slice(1), 10);
+      const rowIndex = ROW_LETTERS_25.indexOf(letter);
+      if (rowIndex < 0 || isNaN(colNum) || colNum < 1) return null;
+
+      const rect = tool7Webview.getBoundingClientRect();
+      const w = rect.width || tool7Webview.clientWidth || 1150;
+      const h = rect.height || tool7Webview.clientHeight || 600;
+
+      const rawCellSize = h / NUM_ROWS;
+      const numCols = Math.max(1, Math.round(w / rawCellSize));
+
+      const cellW = w / numCols;
+      const cellH = h / NUM_ROWS;
+
+      const x = (colNum - 1 + 0.5) * cellW;
+      const y = (rowIndex + 0.5) * cellH;
+
+      return { x: Math.round(x), y: Math.round(y), w, h, cellW, cellH, numCols };
+    }
+
+    // -------------------------------------------------------------
+    // QUẢN LÝ POPUP CONSOLE & MODAL BẢNG LỆNH TOOL 7
+    // -------------------------------------------------------------
+    const btnTool7Help = document.getElementById('btn-tool7-help');
+    const btnCloseTool7Help = document.getElementById('btn-close-tool7-help');
+    const tool7CommandsModal = document.getElementById('tool7-commands-modal');
+
+    if (btnTool7Help && tool7CommandsModal) {
+      btnTool7Help.addEventListener('click', (e) => {
+        e.stopPropagation();
+        tool7CommandsModal.classList.toggle('active');
+      });
+    }
+
+    if (btnCloseTool7Help && tool7CommandsModal) {
+      btnCloseTool7Help.addEventListener('click', () => {
+        tool7CommandsModal.classList.remove('active');
+      });
+    }
+
+    if (tool7CommandsModal) {
+      tool7CommandsModal.addEventListener('click', (e) => {
+        if (e.target === tool7CommandsModal) {
+          tool7CommandsModal.classList.remove('active');
+        }
+      });
+    }
+
+    function closeAllConsoles() {
+      consoleTool2.classList.remove('active');
+      subtool2Btn.classList.remove('console-active');
+      consoleTool8.classList.remove('active');
+      subtool8Btn.classList.remove('console-active');
+      if (consoleSensor) {
+        consoleSensor.classList.remove('active');
+        if (subtoolSensorBtn) subtoolSensorBtn.classList.remove('console-active');
+      }
+      if (consoleLock) {
+        consoleLock.classList.remove('active');
+        if (subtoolLockBtn) subtoolLockBtn.classList.remove('console-active');
+      }
+      if (tool7CommandsModal) {
+        tool7CommandsModal.classList.remove('active');
+      }
+    }
+
+    function toggleConsoleTool2() {
+      const isAct = consoleTool2.classList.contains('active');
+      closeAllConsoles();
+      if (!isAct) {
+        loadTool2Config();
+        consoleTool2.classList.add('active');
+        subtool2Btn.classList.add('console-active');
+        setTimeout(() => {
+          if (typeof autoResizeTool2Textareas === 'function') autoResizeTool2Textareas();
+        }, 50);
+      }
+    }
+
+    function toggleConsoleTool8() {
+      const isAct = consoleTool8.classList.contains('active');
+      closeAllConsoles();
+      if (!isAct) {
+        consoleTool8.classList.add('active');
+        subtool8Btn.classList.add('console-active');
+        if (!tool7CaroGridOverlay.classList.contains('hidden')) {
+          setTimeout(renderConsoleCaroGrid, 50);
+        }
+        try {
+          if (tool7UrlInput && document.activeElement !== tool7UrlInput) {
+            tool7UrlInput.value = tool7Webview.getURL() || 'https://www.google.com/';
+          }
+        } catch(e) {}
+        updateNavButtonsState();
+      }
+    }
+
+    function toggleConsoleSensor() {
+      const isAct = consoleSensor ? consoleSensor.classList.contains('active') : false;
+      closeAllConsoles();
+      if (!isAct && consoleSensor) {
+        loadSensorConfig();
+        consoleSensor.classList.add('active');
+        if (subtoolSensorBtn) subtoolSensorBtn.classList.add('console-active');
+      }
+    }
+
+    const consoleLock = document.getElementById('view-console-lock');
+    const btnSaveConsoleLock = document.getElementById('btn-save-console-lock');
+    const consolePinDigitInputs = document.querySelectorAll('.console-pin-digit');
+    const consoleLockStatusMsg = document.getElementById('console-lock-status-msg');
+
+    function toggleConsoleLock() {
+      const isAct = consoleLock ? consoleLock.classList.contains('active') : false;
+      closeAllConsoles();
+      if (!isAct && consoleLock) {
+        loadLockConfig();
+        consoleLock.classList.add('active');
+        if (subtoolLockBtn) subtoolLockBtn.classList.add('console-active');
+      }
+    }
+
+    async function loadLockConfig() {
+      clearConsolePinInputs();
+      if (consoleLockStatusMsg) {
+        consoleLockStatusMsg.innerText = '';
+        consoleLockStatusMsg.style.color = '#64748b';
+      }
+      setTimeout(() => {
+        if (consolePinDigitInputs && consolePinDigitInputs[0]) consolePinDigitInputs[0].focus();
+      }, 80);
+    }
+
+    function clearConsolePinInputs() {
+      consolePinDigitInputs.forEach(inp => {
+        inp.value = '';
+        inp.classList.remove('has-value', 'error');
+      });
+    }
+
+    function getConsoleEnteredPin() {
+      let pin = '';
+      consolePinDigitInputs.forEach(inp => {
+        if (inp.value && /\d/.test(inp.value)) {
+          pin += inp.value;
+        }
+      });
+      return pin;
+    }
+
+    async function saveLockConfig() {
+      const enteredPin = getConsoleEnteredPin();
+      if (enteredPin.length !== 6) {
+        if (consoleLockStatusMsg) {
+          consoleLockStatusMsg.innerText = '❌ Vui lòng nhập đủ 6 chữ số vào 6 ô!';
+          consoleLockStatusMsg.style.color = '#ef4444';
+        }
+        consolePinDigitInputs.forEach(inp => {
+          if (!inp.value) inp.classList.add('error');
+        });
+        return;
+      }
+
+      currentScreenLockPin = enteredPin;
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig && window.electronAPI.saveDataToolConfig) {
+        try {
+          const config = (await window.electronAPI.loadDataToolConfig()) || {};
+          if (!config.screenLock) config.screenLock = {};
+          config.screenLock.pin = enteredPin;
+          await window.electronAPI.saveDataToolConfig(config);
+          console.log('[Lock Config] Đã lưu mã PIN mới vào datatool.json:', enteredPin);
+        } catch(e) {
+          console.error('[Lock Config] Lỗi lưu mã PIN:', e);
+        }
+      }
+
+      if (consoleLockStatusMsg) {
+        consoleLockStatusMsg.innerText = '✓ Đã cập nhật mã PIN mới thành công!';
+        consoleLockStatusMsg.style.color = '#16a34a';
+      }
+
+      setTimeout(() => closeAllConsoles(), 800);
+    }
+
+    // Gắn sự kiện cho 6 ô nhập mã PIN trong Console
+    consolePinDigitInputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        const val = input.value;
+        const digit = val.replace(/\D/g, '');
+
+        if (!digit) {
+          input.value = '';
+          input.classList.remove('has-value', 'error');
+          return;
+        }
+
+        input.value = digit.slice(-1);
+        input.classList.add('has-value');
+        input.classList.remove('error');
+
+        if (index < consolePinDigitInputs.length - 1) {
+          consolePinDigitInputs[index + 1].focus();
+        }
+
+        if (getConsoleEnteredPin().length === 6 && consoleLockStatusMsg) {
+          consoleLockStatusMsg.innerText = '';
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace') {
+          if (!input.value && index > 0) {
+            e.preventDefault();
+            consolePinDigitInputs[index - 1].value = '';
+            consolePinDigitInputs[index - 1].classList.remove('has-value', 'error');
+            consolePinDigitInputs[index - 1].focus();
+          } else {
+            input.value = '';
+            input.classList.remove('has-value', 'error');
+          }
+        } else if (e.key === 'ArrowLeft' && index > 0) {
+          consolePinDigitInputs[index - 1].focus();
+        } else if (e.key === 'ArrowRight' && index < consolePinDigitInputs.length - 1) {
+          consolePinDigitInputs[index + 1].focus();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          saveLockConfig();
+        }
+      });
+
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+        const digits = pasteData.replace(/\D/g, '').slice(0, 6);
+        if (!digits) return;
+
+        for (let i = 0; i < consolePinDigitInputs.length; i++) {
+          if (i < digits.length) {
+            consolePinDigitInputs[i].value = digits[i];
+            consolePinDigitInputs[i].classList.add('has-value');
+            consolePinDigitInputs[i].classList.remove('error');
+          }
+        }
+
+        const nextFocus = Math.min(digits.length, consolePinDigitInputs.length - 1);
+        consolePinDigitInputs[nextFocus].focus();
+      });
+    });
+
+    if (btnSaveConsoleLock) {
+      btnSaveConsoleLock.addEventListener('click', (e) => {
+        e.preventDefault();
+        saveLockConfig();
+      });
+    }
+
+    async function updateSensorLimitUI(val) {
+      const limit = Math.max(0, Math.min(7, parseInt(val, 10) || 0));
+      currentSensorLimit = limit;
+      if (sensorBtnGroup) {
+        sensorBtnGroup.querySelectorAll('.sensor-limit-btn').forEach(btn => {
+          const btnVal = parseInt(btn.getAttribute('data-val'), 10);
+          if (btnVal === limit) btn.classList.add('active');
+          else btn.classList.remove('active');
+        });
+      }
+
+      // ĐỒNG BỘ NGAY LẬP TỨC ĐẾN WEBVIEW (KHÔNG CẦN CHỜ BẤM SAVE)
+      if (wvMessenger) {
+        try {
+          wvMessenger.send('sensor-update-limit', limit);
+        } catch(e) {}
+      }
+
+      // TỰ ĐỘNG LƯU VÀO DATATOOL.JSON
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig && window.electronAPI.saveDataToolConfig) {
+        try {
+          const config = (await window.electronAPI.loadDataToolConfig()) || {};
+          if (!config.sensorSettings) config.sensorSettings = {};
+          config.sensorSettings.contactLimit = limit;
+          await window.electronAPI.saveDataToolConfig(config);
+          console.log(`[Sensor Config] Đã lưu giới hạn thẻ danh bạ (${limit}) vào datatool.json`);
+        } catch (err) {}
+      }
+    }
+
+    if (sensorBtnGroup) {
+      sensorBtnGroup.addEventListener('click', (e) => {
+        const btn = e.target.closest('.sensor-limit-btn');
+        if (btn) {
+          updateSensorLimitUI(btn.getAttribute('data-val'));
+        }
+      });
+    }
+
+    function syncTool7ProtectionSettings() {
+      if (tool7Webview) {
+        try {
+          tool7Webview.send('sensor-update-protection', {
+            blockPopups: currentSensorBlockPopups,
+            blockAutoRedirect: currentSensorBlockRedirect
+          });
+        } catch(e) {}
+      }
+    }
+
+    async function loadSensorConfig() {
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig) {
+        try {
+          const config = await window.electronAPI.loadDataToolConfig();
+          if (config && config.sensorSettings) {
+            const ss = config.sensorSettings;
+            if (typeof ss.contactLimit === 'number') {
+              await updateSensorLimitUI(ss.contactLimit);
+            } else {
+              await updateSensorLimitUI(7);
+            }
+            if (toggleSensorBlockPopups) {
+              currentSensorBlockPopups = (ss.blockPopups !== false);
+              toggleSensorBlockPopups.checked = currentSensorBlockPopups;
+            }
+            if (toggleSensorBlockRedirect) {
+              currentSensorBlockRedirect = (ss.blockAutoRedirect !== false);
+              toggleSensorBlockRedirect.checked = currentSensorBlockRedirect;
+            }
+          } else {
+            await updateSensorLimitUI(7);
+            if (toggleSensorBlockPopups) toggleSensorBlockPopups.checked = true;
+            if (toggleSensorBlockRedirect) toggleSensorBlockRedirect.checked = true;
+          }
+          syncTool7ProtectionSettings();
+        } catch (err) {}
+      }
+    }
+
+    async function saveSensorProtectionSettings() {
+      currentSensorBlockPopups = toggleSensorBlockPopups ? toggleSensorBlockPopups.checked : true;
+      currentSensorBlockRedirect = toggleSensorBlockRedirect ? toggleSensorBlockRedirect.checked : true;
+      syncTool7ProtectionSettings();
+
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig && window.electronAPI.saveDataToolConfig) {
+        try {
+          const config = (await window.electronAPI.loadDataToolConfig()) || {};
+          if (!config.sensorSettings) config.sensorSettings = {};
+          config.sensorSettings.contactLimit = currentSensorLimit;
+          config.sensorSettings.blockPopups = currentSensorBlockPopups;
+          config.sensorSettings.blockAutoRedirect = currentSensorBlockRedirect;
+          await window.electronAPI.saveDataToolConfig(config);
+          console.log('[Sensor Config] Đã lưu cấu hình bảo vệ duyệt web vào datatool.json');
+        } catch (err) {}
+      }
+    }
+
+    if (toggleSensorBlockPopups) {
+      toggleSensorBlockPopups.addEventListener('change', saveSensorProtectionSettings);
+      toggleSensorBlockPopups.addEventListener('input', saveSensorProtectionSettings);
+    }
+    if (toggleSensorBlockRedirect) {
+      toggleSensorBlockRedirect.addEventListener('change', saveSensorProtectionSettings);
+      toggleSensorBlockRedirect.addEventListener('input', saveSensorProtectionSettings);
+    }
+
+    async function saveSensorConfigAndClose() {
+      await updateSensorLimitUI(currentSensorLimit);
+      await saveSensorProtectionSettings();
+      closeAllConsoles();
+    }
+
+    if (btnSaveConsoleSensor) {
+      btnSaveConsoleSensor.addEventListener('click', saveSensorConfigAndClose);
+    }
+    loadSensorConfig();
+
+    btnSaveConsole2.addEventListener('click', saveTool2ConfigAndClose);
+
+    const platformTabs = [
+      { id: 'messenger', btn: btnMessenger, tab: tabMessenger },
+      { id: 'facebook', btn: btnFacebook, tab: tabFacebook },
+      { id: 'tiktok', btn: btnTiktok, tab: tabTiktok },
+      { id: 'instagram', btn: btnInstagram, tab: tabInstagram }
+    ];
+
+    function switchWebTab(target) {
+      closeAllConsoles();
+      platformTabs.forEach((p) => {
+        if (!p.btn || !p.tab) return;
+        if (p.id === target) {
+          p.btn.classList.add('active');
+          p.tab.classList.add('active');
+
+          if (p.id === 'tiktok' && wvTiktok) {
+            try {
+              wvTiktok.send('tiktok-tab-state', true);
+              wvTiktok.executeJavaScript(`
+                const vids = document.querySelectorAll('video');
+                vids.forEach(v => {
+                  if (v.paused && (location.href.includes('/live') || document.querySelector('[data-e2e="live-player"]'))) {
+                    try { v.play().catch(() => {}); } catch(e) {}
+                  }
+                });
+              `).catch(() => {});
+            } catch(e) {}
+          }
+        } else {
+          p.btn.classList.remove('active');
+          p.tab.classList.remove('active');
+
+          // Khi rời khỏi tab TikTok -> Tự động dừng các video đang phát để tiết kiệm tài nguyên & băng thông
+          if (p.id === 'tiktok' && wvTiktok) {
+            try {
+              wvTiktok.send('tiktok-tab-state', false);
+              wvTiktok.executeJavaScript(`
+                document.querySelectorAll('video, audio').forEach(el => {
+                  try { el.pause(); } catch(e) {}
+                });
+              `).catch(() => {});
+            } catch(e) {}
+          }
+        }
+      });
+    }
+
+    function reloadAppWebview(btn, webview, appName) {
+      if (!webview) return;
+      try {
+        webview.reload();
+        console.log(`[Reload] 🔄 Đang tải lại (F5) ứng dụng ${appName}...`);
+        if (btn) {
+          btn.style.transition = 'transform 0.45s ease-in-out';
+          btn.style.transform = 'rotate(360deg)';
+          setTimeout(() => {
+            btn.style.transition = 'none';
+            btn.style.transform = 'none';
+          }, 450);
+        }
+      } catch (e) {
+        console.error(`[Reload] Lỗi khi tải lại ${appName}:`, e);
+      }
+    }
+
+    if (btnMessenger) {
+      btnMessenger.addEventListener('click', () => switchWebTab('messenger'));
+      btnMessenger.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        reloadAppWebview(btnMessenger, wvMessenger, 'Messenger');
+      });
+    }
+
+    if (btnFacebook) {
+      btnFacebook.addEventListener('click', () => switchWebTab('facebook'));
+      btnFacebook.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        reloadAppWebview(btnFacebook, wvFacebook, 'Facebook');
+      });
+    }
+
+    if (btnTiktok) {
+      btnTiktok.addEventListener('click', () => switchWebTab('tiktok'));
+      btnTiktok.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        reloadAppWebview(btnTiktok, wvTiktok, 'TikTok');
+      });
+    }
+
+    if (btnInstagram) {
+      btnInstagram.addEventListener('click', () => switchWebTab('instagram'));
+      btnInstagram.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        reloadAppWebview(btnInstagram, wvInstagram, 'Instagram');
+      });
+    }
+
+    // Tự động tạm dừng video đầu tiên của TikTok khi vừa nạp ngầm lúc mở tool
+    if (wvTiktok) {
+      let hasEverOpenedTiktok = false;
+
+      const syncTiktokTabState = () => {
+        if (!wvTiktok) return;
+        const isCurrentActive = tabTiktok && tabTiktok.classList.contains('active');
+        try {
+          wvTiktok.send('tiktok-tab-state', isCurrentActive);
+        } catch(e) {}
+      };
+
+      wvTiktok.addEventListener('dom-ready', syncTiktokTabState);
+      wvTiktok.addEventListener('did-navigate', syncTiktokTabState);
+      wvTiktok.addEventListener('did-navigate-in-page', syncTiktokTabState);
+
+      const pauseBgTiktok = () => {
+        if (tabTiktok && !tabTiktok.classList.contains('active') && !hasEverOpenedTiktok) {
+          try {
+            wvTiktok.send('tiktok-tab-state', false);
+            wvTiktok.executeJavaScript(`
+              if (!window.location.href.includes('/live')) {
+                document.querySelectorAll('video, audio').forEach(el => {
+                  try { el.pause(); } catch(e) {}
+                });
+              }
+            `).catch(() => {});
+          } catch(e) {}
+        }
+      };
+
+      wvTiktok.addEventListener('dom-ready', () => {
+        if (tabTiktok && !tabTiktok.classList.contains('active') && !hasEverOpenedTiktok) {
+          pauseBgTiktok();
+          const tInterval = setInterval(() => {
+            if (tabTiktok && !tabTiktok.classList.contains('active') && !hasEverOpenedTiktok) {
+              pauseBgTiktok();
+            } else {
+              clearInterval(tInterval);
+            }
+          }, 500);
+          setTimeout(() => clearInterval(tInterval), 5000);
+        }
+      });
+
+      if (btnTiktok) {
+        btnTiktok.addEventListener('click', () => {
+          hasEverOpenedTiktok = true;
+        });
+      }
+    }
+
+    // 3. Khóa cứng Tab Messenger
+    const guardMessengerUrl = (url) => {
+      if (!url) return;
+      const lower = url.toLowerCase();
+      const isAuth = lower.includes('/login') || lower.includes('/checkpoint') || lower.includes('/two_factor') || lower.includes('/auth') || lower.includes('/recover');
+      if (lower.includes('facebook.com') && !isAuth) {
+        wvMessenger.loadURL('https://www.messenger.com/');
+      }
+    };
+
+    wvMessenger.addEventListener('will-navigate', (e) => guardMessengerUrl(e.url));
+    wvMessenger.addEventListener('did-navigate', (e) => guardMessengerUrl(e.url));
+    wvMessenger.addEventListener('did-redirect-navigation', (e) => guardMessengerUrl(e.url));
+
+    // 4. Bật / Tắt (Toggle On/Off) đèn xanh khi CLICK CHUỘT TRÁI & Tự động lưu cấu hình
+    document.querySelectorAll('.subtool-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        btn.classList.toggle('active-toggle');
+        if (btn.id === 'subtool-2') {
+          const isT2On = btn.classList.contains('active-toggle');
+          try {
+            wvMessenger.send('tool2-toggle-state', isT2On);
+          } catch(e) {}
+          if (isT2On) {
+            updateTool2Status('⚡ Đã BẬT cảm biến Tool 2 - Sẵn sàng nhận tin nhắn & lệnh AI...', 'info');
+          } else {
+            updateTool2Status('⏸️ Đã TẮT cảm biến Tool 2 (Click để Bật lại)', 'info');
+          }
+        } else if (btn.id === 'subtool-8') {
+          const isT7On = btn.classList.contains('active-toggle');
+          try {
+            wvMessenger.send('tool7-toggle-state', isT7On);
+          } catch(e) {}
+        } else if (btn.id === 'subtool-sensor') {
+          const isSensorOn = btn.classList.contains('active-toggle');
+          try {
+            wvMessenger.send('sensor-toggle-overlay', isSensorOn);
+          } catch(e) {}
+        } else if (btn.id === 'subtool-lock') {
+          // Kích hoạt khóa màn hình toàn diện
+          activateScreenLock(true);
+        }
+        await saveSubtoolsState();
+      });
+    });
+
+    const gridToggleCheckbox = document.getElementById('toggle-tool7-grid');
+    if (gridToggleCheckbox) {
+      gridToggleCheckbox.addEventListener('change', async () => {
+        renderConsoleCaroGrid();
+        await saveSubtoolsState();
+      });
+    }
+
+    async function saveSubtoolsState() {
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig && window.electronAPI.saveDataToolConfig) {
+        try {
+          const config = (await window.electronAPI.loadDataToolConfig()) || {};
+          const state = {};
+          document.querySelectorAll('.subtool-btn').forEach((btn) => {
+            if (btn.id) {
+              state[btn.id] = btn.classList.contains('active-toggle');
+            }
+          });
+          const gridToggle = document.getElementById('toggle-tool7-grid');
+          if (gridToggle) {
+            state['tool7-caro-grid'] = gridToggle.checked;
+          }
+          config.subtoolsState = state;
+          await window.electronAPI.saveDataToolConfig(config);
+          console.log('[SubtoolsState] Đã lưu trạng thái Bật/Tắt các tool con vào datatool.json');
+        } catch(err) {
+          console.error('[SubtoolsState] Lỗi lưu trạng thái:', err);
+        }
+      }
+    }
+
+    async function loadSubtoolsState() {
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig) {
+        try {
+          const config = await window.electronAPI.loadDataToolConfig();
+          if (config && config.subtoolsState) {
+            const state = config.subtoolsState;
+            document.querySelectorAll('.subtool-btn').forEach((btn) => {
+              if (btn.id && state[btn.id] !== undefined) {
+                if (state[btn.id]) {
+                  btn.classList.add('active-toggle');
+                } else {
+                  btn.classList.remove('active-toggle');
+                }
+              }
+            });
+            const gridToggle = document.getElementById('toggle-tool7-grid');
+            if (gridToggle && state['tool7-caro-grid'] !== undefined) {
+              gridToggle.checked = !!state['tool7-caro-grid'];
+              renderConsoleCaroGrid();
+            }
+
+            // Đồng bộ trạng thái Khóa màn hình
+            const isLockActive = (state['subtool-lock'] === true) || (config.screenLock && config.screenLock.isLocked === true);
+            if (isLockActive) {
+              activateScreenLock(false);
+            }
+
+            // Đồng bộ trạng thái Tool 2 (AI Auto Reply) sang Messenger
+            const isT2On = subtool2Btn.classList.contains('active-toggle');
+            try {
+              wvMessenger.send('tool2-toggle-state', isT2On);
+            } catch(e) {}
+
+            // Đồng bộ trạng thái Tool 7 sang Messenger
+            const isT7On = subtool8Btn.classList.contains('active-toggle');
+            try {
+              wvMessenger.send('tool7-toggle-state', isT7On);
+            } catch(e) {}
+
+            // Đồng bộ trạng thái Sensor Overlay sang Messenger
+            const subtoolSensor = document.getElementById('subtool-sensor');
+            if (subtoolSensor) {
+              const isSensorOn = subtoolSensor.classList.contains('active-toggle');
+              try {
+                wvMessenger.send('sensor-toggle-overlay', isSensorOn);
+              } catch(e) {}
+            }
+          }
+        } catch(err) {
+          console.error('[SubtoolsState] Lỗi tải trạng thái:', err);
+        }
+      }
+    }
+    loadSubtoolsState();
+
+    wvMessenger.addEventListener('did-finish-load', () => {
+      try {
+        const isT2On = subtool2Btn.classList.contains('active-toggle');
+        wvMessenger.send('tool2-toggle-state', isT2On);
+        const isT7On = subtool8Btn.classList.contains('active-toggle');
+        wvMessenger.send('tool7-toggle-state', isT7On);
+        const isSensorOn = document.getElementById('subtool-sensor').classList.contains('active-toggle');
+        wvMessenger.send('sensor-toggle-overlay', isSensorOn);
+        wvMessenger.send('sensor-update-limit', currentSensorLimit);
+      } catch(e) {}
+    });
+
+    // 5. Chuột phải mở console
+    subtool2Btn.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      toggleConsoleTool2();
+    });
+
+    subtool8Btn.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      toggleConsoleTool8();
+    });
+
+    if (subtoolSensorBtn) {
+      subtoolSensorBtn.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        toggleConsoleSensor();
+      });
+    }
+
+    if (subtoolLockBtn) {
+      subtoolLockBtn.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        toggleConsoleLock();
+      });
+    }
+
+    // -------------------------------------------------------------
+    // ĐIỀU HƯỚNG & THANH NHẬP URL TOOL 7 (TRÌNH DUYỆT THẬT)
+    // -------------------------------------------------------------
+    function updateNavButtonsState() {
+      if (btnTool7Back) btnTool7Back.disabled = !tool7Webview.canGoBack();
+      if (btnTool7Forward) btnTool7Forward.disabled = !tool7Webview.canGoForward();
+    }
+
+    if (btnTool7Back) {
+      btnTool7Back.addEventListener('click', () => {
+        markTool7UserAction();
+        if (tool7Webview.canGoBack()) {
+          tool7Webview.goBack();
+          tool7StatusText.innerText = '⬅️ Đang quay lại trang trước...';
+        }
+      });
+    }
+
+    if (btnTool7Forward) {
+      btnTool7Forward.addEventListener('click', () => {
+        markTool7UserAction();
+        if (tool7Webview.canGoForward()) {
+          tool7Webview.goForward();
+          tool7StatusText.innerText = '➡️ Đang đi tới trang tiếp theo...';
+        }
+      });
+    }
+
+    if (btnTool7Reload) {
+      btnTool7Reload.addEventListener('click', () => {
+        markTool7UserAction();
+        tool7StatusText.innerText = '🔄 Đang tải lại trang web...';
+        try {
+          tool7Webview.reload();
+        } catch(e) {}
+      });
+    }
+
+    if (btnTool7ClearData) {
+      btnTool7ClearData.addEventListener('click', async () => {
+        markTool7UserAction();
+        tool7StatusText.innerText = '🧹 Đang xóa sạch dữ liệu duyệt web & cache của Tool 7...';
+        try {
+          if (window.electronAPI && window.electronAPI.clearTool7WebData) {
+            await window.electronAPI.clearTool7WebData();
+          }
+          try {
+            tool7Webview.loadURL('https://www.google.com/');
+          } catch(e) {}
+          if (tool7UrlInput) tool7UrlInput.value = 'https://www.google.com/';
+          tool7StatusText.innerText = '✨ Đã xóa sạch 100% dữ liệu & cache của Tool 7!';
+        } catch (err) {
+          tool7StatusText.innerText = `❌ Lỗi xóa dữ liệu: ${err.message}`;
+        }
+      });
+    }
+
+    function navigateTool7ToUrl(rawInput) {
+      if (!rawInput) return;
+      const rawText = (typeof rawInput === 'string' ? rawInput : '').trim();
+      if (!rawText) return;
+
+      markTool7UserAction();
+
+      let targetUrl = rawText;
+      if (/^https?:\/\//i.test(targetUrl)) {
+        // Đã có tiền tố https:// hoặc http://
+      } else if (targetUrl.includes('.') && !targetUrl.includes(' ') && !targetUrl.startsWith('/')) {
+        targetUrl = 'https://' + targetUrl;
+      } else if (targetUrl.startsWith('localhost') || targetUrl.startsWith('127.0.0.1')) {
+        targetUrl = 'http://' + targetUrl;
+      } else {
+        targetUrl = `https://www.google.com/search?q=${encodeURIComponent(targetUrl)}`;
+      }
+
+      // Giữ y nguyên nội dung nhập vào thanh URL, không tự ý chèn https:// vào ô nhập
+      if (tool7UrlInput) tool7UrlInput.value = rawText;
+      tool7StatusText.innerText = `⏳ Đang tải: ${rawText}...`;
+      try {
+        tool7Webview.loadURL(targetUrl);
+      } catch(e) {
+        console.error('[Tool 7 Navigate Error]:', e);
+      }
+    }
+
+    if (tool7UrlInput) {
+      tool7UrlInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          navigateTool7ToUrl(tool7UrlInput.value);
+          tool7UrlInput.blur();
+        }
+      });
+
+      tool7UrlInput.addEventListener('focus', () => {
+        tool7UrlInput.select();
+      });
+    }
+
+    // Ghi nhận tương tác chuột trên vùng hiển thị web của Tool 7
+    const tool7WebviewWrapper = document.querySelector('.tool7-webview-wrapper');
+    if (tool7WebviewWrapper) {
+      tool7WebviewWrapper.addEventListener('mousedown', markTool7UserAction, true);
+      tool7WebviewWrapper.addEventListener('touchstart', markTool7UserAction, true);
+    }
+
+    // 1. Chặn cửa sổ Popups từ Tool 7 (Tính năng 1)
+    tool7Webview.addEventListener('new-window', (e) => {
+      if (currentSensorBlockPopups) {
+        e.preventDefault();
+        console.warn('[Tool 7 Webview] 🚫 Đã chặn cửa sổ popup:', e.url);
+        if (tool7StatusText) {
+          const prev = tool7StatusText.innerText;
+          tool7StatusText.innerText = '🚫 Đã chặn cửa sổ popup quảng cáo!';
+          setTimeout(() => {
+            if (tool7StatusText && tool7StatusText.innerText === '🚫 Đã chặn cửa sổ popup quảng cáo!') {
+              tool7StatusText.innerText = prev;
+            }
+          }, 2500);
+        }
+      }
+    });
+
+    // 2. Chặn tự động chuyển hướng URL quảng cáo (Tính năng 2)
+    tool7Webview.addEventListener('will-navigate', (e) => {
+      const targetUrl = e.url || '';
+      const currentUrl = tool7Webview.getURL() || '';
+
+      if (currentSensorBlockRedirect) {
+        const now = Date.now();
+        const elapsed = now - lastTool7UserInteraction;
+
+        let isSameOrigin = false;
+        try {
+          const u1 = new URL(currentUrl);
+          const u2 = new URL(targetUrl);
+          isSameOrigin = (u1.hostname === u2.hostname || u2.hostname.endsWith('.' + u1.hostname) || u1.hostname.endsWith('.' + u2.hostname));
+        } catch(err) {}
+
+        // Nếu không phải do người dùng trực tiếp gõ/chọn lệnh, và không có tương tác trong 1500ms, và đích đến là domain khác
+        if (!isUserInitiatedTool7Nav && elapsed > 1500 && !isSameOrigin) {
+          e.preventDefault();
+          console.warn(`[Tool 7 Anti-Redirect] 🛡️ Đã chặn chuyển hướng tự động từ ${currentUrl} sang: ${targetUrl}`);
+          if (tool7StatusText) {
+            const prev = tool7StatusText.innerText;
+            tool7StatusText.innerText = '🛡️ Đã chặn quảng cáo tự đổi địa chỉ URL!';
+            setTimeout(() => {
+              if (tool7StatusText && tool7StatusText.innerText === '🛡️ Đã chặn quảng cáo tự đổi địa chỉ URL!') {
+                tool7StatusText.innerText = prev;
+              }
+            }, 3000);
+          }
+          return;
+        }
+      }
+
+      isUserInitiatedTool7Nav = false;
+    });
+
+    // Cập nhật thanh URL khi webview bên trong Console chuyển trang
+    tool7Webview.addEventListener('did-navigate', (e) => {
+      if (e.url && tool7UrlInput && document.activeElement !== tool7UrlInput) {
+        tool7UrlInput.value = e.url;
+      }
+      renderConsoleCaroGrid();
+      updateNavButtonsState();
+    });
+
+    tool7Webview.addEventListener('did-navigate-in-page', (e) => {
+      if (e.url && tool7UrlInput && document.activeElement !== tool7UrlInput) {
+        tool7UrlInput.value = e.url;
+      }
+      renderConsoleCaroGrid();
+      updateNavButtonsState();
+    });
+
+    tool7Webview.addEventListener('did-stop-loading', () => {
+      updateNavButtonsState();
+    });
+
+    tool7Webview.addEventListener('dom-ready', () => {
+      syncTool7ProtectionSettings();
+      updateNavButtonsState();
+    });
+
+    // -------------------------------------------------------------
+    // 6. CẤU HÌNH TOOL 2 (AI AUTO REPLY - GROK xAI)
+    // -------------------------------------------------------------
+    const inputApiKey = document.getElementById('tool2-api-key');
+    const inputWhoami = document.getElementById('tool2-whoami');
+    const inputDiscipline = document.getElementById('tool2-discipline');
+    const inputBlacklist = document.getElementById('tool2-blacklist');
+    const selectTool2Model = document.getElementById('tool2-model-select');
+    const tool2CustomSelect = document.getElementById('tool2-custom-select');
+    const tool2SelectTrigger = document.getElementById('tool2-select-trigger');
+    const tool2SelectedText = document.getElementById('tool2-selected-text');
+    const tool2SelectDropdown = document.getElementById('tool2-select-dropdown');
+    const tool2DropdownList = document.getElementById('tool2-dropdown-list');
+    const tool2ModelCount = document.getElementById('tool2-model-count');
+    const btnCheckTool2Api = document.getElementById('btn-check-tool2-api');
+    const tool2ApiCheckResult = document.getElementById('tool2-api-check-result');
+    const tool2ApiStatus = document.getElementById('tool2-api-status');
+    const tool2StatusText = document.getElementById('tool2-status-text');
+
+    function autoResizeSingleTextarea(el) {
+      if (!el) return;
+      el.style.height = 'auto';
+      el.style.height = (el.scrollHeight) + 'px';
+    }
+
+    function autoResizeTool2Textareas() {
+      [inputWhoami, inputDiscipline, inputBlacklist].forEach(el => {
+        if (el) autoResizeSingleTextarea(el);
+      });
+    }
+
+    [inputWhoami, inputDiscipline, inputBlacklist].forEach(el => {
+      if (el) {
+        el.addEventListener('input', () => autoResizeSingleTextarea(el));
+      }
+    });
+
+    function setApiCheckBadge(status) {
+      if (!tool2ApiCheckResult) return;
+      if (status === 'success') {
+        tool2ApiCheckResult.style.display = 'inline-flex';
+        tool2ApiCheckResult.style.alignItems = 'center';
+        tool2ApiCheckResult.style.justifyContent = 'center';
+        tool2ApiCheckResult.style.color = '#16a34a';
+        tool2ApiCheckResult.innerHTML = `
+          <svg viewBox="0 0 20 20" fill="currentColor" width="22" height="22" style="display: block;">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+        `;
+        tool2ApiCheckResult.title = 'API Key hợp lệ';
+      } else if (status === 'error') {
+        tool2ApiCheckResult.style.display = 'inline-flex';
+        tool2ApiCheckResult.style.alignItems = 'center';
+        tool2ApiCheckResult.style.justifyContent = 'center';
+        tool2ApiCheckResult.style.color = '#dc2626';
+        tool2ApiCheckResult.innerHTML = `
+          <svg viewBox="0 0 20 20" fill="currentColor" width="22" height="22" style="display: block;">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+        `;
+        tool2ApiCheckResult.title = 'API Key không hợp lệ';
+      } else if (status === 'loading') {
+        tool2ApiCheckResult.style.display = 'inline-flex';
+        tool2ApiCheckResult.style.alignItems = 'center';
+        tool2ApiCheckResult.style.justifyContent = 'center';
+        tool2ApiCheckResult.style.color = '#0ea5e9';
+        tool2ApiCheckResult.innerHTML = `
+          <svg style="animation: spin 1s linear infinite;" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25" stroke="currentColor"></circle>
+            <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor"></path>
+          </svg>
+        `;
+        tool2ApiCheckResult.title = 'Đang kiểm tra...';
+      } else {
+        tool2ApiCheckResult.style.display = 'none';
+        tool2ApiCheckResult.innerHTML = '';
+      }
+    }
+
+    if (inputApiKey) {
+      inputApiKey.addEventListener('input', () => setApiCheckBadge('none'));
+    }
+
+    function updateTool2Status(text, level = 'info') {
+      if (!text || !tool2StatusText) return;
+      tool2StatusText.innerText = text;
+      tool2StatusText.classList.remove('status-processing', 'status-success', 'status-error');
+      if (level === 'processing') tool2StatusText.classList.add('status-processing');
+      else if (level === 'success') tool2StatusText.classList.add('status-success');
+      else if (level === 'error') tool2StatusText.classList.add('status-error');
+    }
+
+    if (window.electronAPI && window.electronAPI.onTool2StatusUpdate) {
+      window.electronAPI.onTool2StatusUpdate((data) => {
+        if (data && data.text) {
+          updateTool2Status(data.text, data.level || 'info');
+        }
+      });
+    }
+
+    let savedConfigModel = '';
+    let loadedGemini3Models = [];
+
+    // Hàm phân tích thông tin chi tiết của Model Gemini để gắn Badge
+    function getModelMetadata(name) {
+      const lower = (name || '').toLowerCase();
+      let badges = [];
+
+      // Version badge (ví dụ: v3.0, v3.1, v3.5, v3.6, v3.7...)
+      const verMatch = lower.match(/gemini-([0-9]+(\.[0-9]+)?)/);
+      if (verMatch) {
+        badges.push({ text: `v${verMatch[1]}`, cls: 'tool2-badge-version' });
+      }
+
+      if (lower.includes('flash-lite')) {
+        badges.push({ text: 'Flash-Lite', cls: 'tool2-badge-lite' });
+      } else if (lower.includes('flash')) {
+        badges.push({ text: 'Flash', cls: 'tool2-badge-flash' });
+      } else if (lower.includes('pro')) {
+        badges.push({ text: 'Pro', cls: 'tool2-badge-pro' });
+      }
+
+      if (lower.includes('preview')) {
+        badges.push({ text: 'Preview', cls: 'tool2-badge-version' });
+      }
+
+      return { badges };
+    }
+
+    function selectModelItem(modelName) {
+      if (!modelName) return;
+      if (selectTool2Model) selectTool2Model.value = modelName;
+      if (tool2SelectedText) tool2SelectedText.innerText = modelName;
+
+      // Cập nhật trạng thái active trong custom dropdown
+      if (tool2DropdownList) {
+        const items = tool2DropdownList.querySelectorAll('.tool2-model-item');
+        items.forEach(el => {
+          if (el.getAttribute('data-model') === modelName) {
+            el.classList.add('selected');
+          } else {
+            el.classList.remove('selected');
+          }
+        });
+      }
+    }
+
+    function renderCustomModelList(models, preferredModel = '') {
+      loadedGemini3Models = models || [];
+      if (!tool2DropdownList) return;
+
+      if (!models || models.length === 0) {
+        tool2DropdownList.innerHTML = '<div class="tool2-dropdown-empty">Không tìm thấy model Gemini 3.0+ nào hỗ trợ API Key này.</div>';
+        if (tool2ModelCount) tool2ModelCount.innerText = '0 model';
+        if (tool2SelectedText) tool2SelectedText.innerText = '-- Không có model Gemini 3.0+ --';
+        if (selectTool2Model) selectTool2Model.innerHTML = '';
+        return;
+      }
+
+      if (tool2ModelCount) tool2ModelCount.innerText = `${models.length} model`;
+      tool2DropdownList.innerHTML = '';
+      if (selectTool2Model) selectTool2Model.innerHTML = '';
+
+      models.forEach(m => {
+        // Đồng bộ thẻ select ẩn
+        if (selectTool2Model) {
+          const opt = document.createElement('option');
+          opt.value = m;
+          opt.textContent = m;
+          selectTool2Model.appendChild(opt);
+        }
+
+        const meta = getModelMetadata(m);
+        const item = document.createElement('div');
+        item.className = 'tool2-model-item';
+        item.setAttribute('data-model', m);
+
+        let badgesHtml = meta.badges.map(b => `<span class="tool2-badge ${b.cls}">${b.text}</span>`).join('');
+
+        item.innerHTML = `
+          <div class="tool2-model-main">
+            <div class="tool2-model-info">
+              <span class="tool2-model-name">${m}</span>
+              <div class="tool2-model-badges">${badgesHtml}</div>
+            </div>
+          </div>
+          <span class="tool2-model-check">✓</span>
+        `;
+
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectModelItem(m);
+          if (tool2CustomSelect) tool2CustomSelect.classList.remove('active');
+        });
+
+        tool2DropdownList.appendChild(item);
+      });
+
+      // Chọn model mục tiêu: ưu tiên model đã lưu -> model đang chọn -> model đầu tiên
+      const targetModel = (preferredModel && models.includes(preferredModel))
+        ? preferredModel
+        : ((savedConfigModel && models.includes(savedConfigModel)) ? savedConfigModel : models[0]);
+
+      selectModelItem(targetModel);
+    }
+
+    // Sự kiện mở/đóng dropdown custom
+    if (tool2SelectTrigger) {
+      tool2SelectTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (tool2CustomSelect) {
+          tool2CustomSelect.classList.toggle('active');
+        }
+      });
+    }
+
+    // Đóng dropdown khi click ra ngoài
+    document.addEventListener('click', (e) => {
+      if (tool2CustomSelect && !tool2CustomSelect.contains(e.target)) {
+        tool2CustomSelect.classList.remove('active');
+      }
+    });
+
+    async function verifyAndDisplayApiStatus(apiKey, isExplicitCheck = false) {
+      if (!tool2ApiStatus) return false;
+      const key = (apiKey || '').trim();
+      if (!key) {
+        setApiCheckBadge('error');
+        tool2ApiStatus.style.display = 'block';
+        tool2ApiStatus.style.background = '#fef2f2';
+        tool2ApiStatus.style.border = '1px solid #ef4444';
+        tool2ApiStatus.style.color = '#991b1b';
+        tool2ApiStatus.innerHTML = '⚠️ Chưa nhập API Key! Vui lòng nhập Google Gemini API Key.';
+        renderCustomModelList([]);
+        return false;
+      }
+
+      if (isExplicitCheck) {
+        setApiCheckBadge('loading');
+        tool2ApiStatus.style.display = 'block';
+        tool2ApiStatus.style.background = '#f0f9ff';
+        tool2ApiStatus.style.border = '1px solid #0ea5e9';
+        tool2ApiStatus.style.color = '#0369a1';
+        tool2ApiStatus.innerHTML = '🔄 Đang kiểm tra API Key và tải danh sách Model...';
+      }
+
+      try {
+        const verifyFn = (window.electronAPI && window.electronAPI.verifyGeminiApiKey) || (window.electronAPI && window.electronAPI.verifyXaiApiKey);
+        if (verifyFn) {
+          const res = await verifyFn(key);
+          if (res && res.success && Array.isArray(res.models) && res.models.length > 0) {
+            // Khi thành công -> Hiện dấu tích v màu xanh lá bên trái nút và ẩn bảng màu xanh
+            setApiCheckBadge('success');
+            tool2ApiStatus.style.display = 'none';
+            tool2ApiStatus.innerHTML = '';
+
+            renderCustomModelList(res.models, selectTool2Model ? selectTool2Model.value : '');
+            return true;
+          } else if (res && res.success) {
+            setApiCheckBadge('error');
+            renderCustomModelList([]);
+            tool2ApiStatus.style.display = 'block';
+            tool2ApiStatus.style.background = '#fffbeb';
+            tool2ApiStatus.style.border = '1px solid #f59e0b';
+            tool2ApiStatus.style.color = '#92400e';
+            tool2ApiStatus.innerHTML = `⚠️ API Key hợp lệ nhưng không tìm thấy Model Gemini 3.0+ nào được cấp quyền.`;
+            return false;
+          } else {
+            setApiCheckBadge('error');
+            renderCustomModelList([]);
+            tool2ApiStatus.style.display = 'block';
+            tool2ApiStatus.style.background = '#fef2f2';
+            tool2ApiStatus.style.border = '1px solid #ef4444';
+            tool2ApiStatus.style.color = '#991b1b';
+            tool2ApiStatus.innerHTML = `<strong>❌ Lỗi kết nối Google Gemini:</strong><br>${(res && res.error) || 'API Key không hợp lệ.'}`;
+            return false;
+          }
+        }
+      } catch(err) {
+        setApiCheckBadge('error');
+        renderCustomModelList([]);
+        tool2ApiStatus.style.display = 'block';
+        tool2ApiStatus.style.background = '#fef2f2';
+        tool2ApiStatus.style.border = '1px solid #ef4444';
+        tool2ApiStatus.style.color = '#991b1b';
+        tool2ApiStatus.innerHTML = `<strong>❌ Lỗi:</strong> ${err.message}`;
+        return false;
+      }
+      return false;
+    }
+
+    if (btnCheckTool2Api) {
+      btnCheckTool2Api.addEventListener('click', (e) => {
+        e.preventDefault();
+        verifyAndDisplayApiStatus(inputApiKey.value, true);
+      });
+    }
+
+    async function loadTool2Config() {
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig) {
+        try {
+          const config = await window.electronAPI.loadDataToolConfig();
+          if (config && config.aiAutoReply) {
+            inputApiKey.value = config.aiAutoReply.apiKey || '';
+            inputWhoami.value = config.aiAutoReply.whoami || '';
+            inputDiscipline.value = config.aiAutoReply.discipline || '';
+            if (inputBlacklist) inputBlacklist.value = config.aiAutoReply.blacklist || '';
+            savedConfigModel = config.aiAutoReply.currentModel || '';
+
+            // Tự động kiểm tra và tải đúng danh sách Model Gemini 3.0+ khả dụng với Key đã lưu
+            if (inputApiKey.value.trim()) {
+              verifyAndDisplayApiStatus(inputApiKey.value.trim(), false);
+            }
+
+            setTimeout(autoResizeTool2Textareas, 40);
+          }
+        } catch (err) {}
+      }
+    }
+
+    async function saveTool2ConfigAndClose() {
+      const apiKeyVal = inputApiKey.value.trim();
+      const isValid = await verifyAndDisplayApiStatus(apiKeyVal);
+
+      if (window.electronAPI && window.electronAPI.loadDataToolConfig && window.electronAPI.saveDataToolConfig) {
+        try {
+          const config = (await window.electronAPI.loadDataToolConfig()) || {};
+          const existingAi = config.aiAutoReply || {};
+          config.aiAutoReply = {
+            apiKey: apiKeyVal,
+            whoami: inputWhoami.value.trim(),
+            discipline: inputDiscipline.value.trim(),
+            blacklist: inputBlacklist ? inputBlacklist.value.trim() : '',
+            currentModel: (selectTool2Model && selectTool2Model.value) ? selectTool2Model.value : (existingAi.currentModel || ''),
+            autoReadThreads: existingAi.autoReadThreads || []
+          };
+          await window.electronAPI.saveDataToolConfig(config);
+          console.log('[Tool 2 Config] Đã lưu cấu hình AI Auto Reply vào datatool.json');
+        } catch (err) {}
+      }
+
+      if (isValid) {
+        setTimeout(() => closeAllConsoles(), 1500);
+      }
+    }
+    loadTool2Config();
+
+    // ==========================================================================
+    // 7. LÕI TỰ ĐỘNG TOOL 7: VẼ LƯỚI SIÊU TỐC KHÔNG BAO GIỜ BỊ TREO (GUARDED)
+    // ==========================================================================
+
+    async function compositeImageWithCaroGrid(nativeImg, drawGrid = true) {
+      if (!nativeImg) return '';
+
+      return new Promise((resolve) => {
+        const timeoutGuard = setTimeout(() => {
+          console.warn('[Tool 7] Timeout render canvas -> xuất ảnh trực tiếp');
+          try {
+            resolve(nativeImg.toDataURL());
+          } catch(e) {
+            resolve('');
+          }
+        }, 1200);
+
+        const img = new Image();
+        img.onload = () => {
+          clearTimeout(timeoutGuard);
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width || 1280;
+            canvas.height = img.height || 720;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+            // 1. Vẽ ảnh web gốc
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // 2. Vẽ lưới caro nếu có yêu cầu (Đồng bộ 100% tỷ lệ và vị trí pixel với DOM)
+            if (drawGrid) {
+              const rawCellSize = canvas.height / NUM_ROWS;
+              const numCols = Math.max(1, Math.round(canvas.width / rawCellSize));
+
+              const cellW = canvas.width / numCols;
+              const cellH = canvas.height / NUM_ROWS;
+
+              ctx.strokeStyle = '#000000';
+              ctx.lineWidth = 1;
+
+              // Batch vẽ đường lưới: Đi từ 0 đến chính xác mép biên canvas.width & canvas.height
+              ctx.beginPath();
+              for (let c = 0; c <= numCols; c++) {
+                const x = Math.round(c * cellW);
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+              }
+              for (let r = 0; r <= NUM_ROWS; r++) {
+                const y = Math.round(r * cellH);
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+              }
+              ctx.stroke();
+
+              // In chữ mã định danh ngay tâm từng ô
+              const fontSize = Math.max(10, Math.round(cellH * 0.40));
+              ctx.fillStyle = '#000000';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.font = `bold ${fontSize}px sans-serif`;
+
+              for (let r = 0; r < NUM_ROWS; r++) {
+                const letter = ROW_LETTERS_25[r];
+                const centerY = (r + 0.5) * cellH;
+                for (let c = 0; c < numCols; c++) {
+                  const label = `${letter}${c + 1}`;
+                  const centerX = (c + 0.5) * cellW;
+                  ctx.fillText(label, centerX, centerY);
+                }
+              }
+            }
+
+            resolve(canvas.toDataURL('image/jpeg', 0.90));
+          } catch (err) {
+            resolve(nativeImg.toDataURL());
+          }
+        };
+
+        img.onerror = () => {
+          clearTimeout(timeoutGuard);
+          resolve(nativeImg.toDataURL());
+        };
+
+        img.src = nativeImg.toDataURL();
+      });
+    }
+
+    let isProcessingTool7Command = false;
+
+    async function executeWebFlow(payload) {
+      if (isProcessingTool7Command) return;
+      isProcessingTool7Command = true;
+
+      // Chuẩn hóa danh sách các bước (steps) trong chuỗi lệnh
+      let steps = [];
+      if (Array.isArray(payload)) {
+        steps = payload;
+      } else if (payload && Array.isArray(payload.steps) && payload.steps.length > 0) {
+        steps = payload.steps;
+      } else if (typeof payload === 'string') {
+        steps = [{ action: 'open_url', url: payload }];
+      } else if (payload && payload.action) {
+        steps = [payload];
+      }
+
+      if (!steps || steps.length === 0) {
+        isProcessingTool7Command = false;
+        return;
+      }
+
+      console.log(`[Host Tool 7] ⚡ Bắt đầu chuỗi ${steps.length} lệnh:`, steps);
+
+      let drawGrid = true;
+      let shouldCaptureAndSend = true;
+
+      const performCaptureAndSend = async (customGridFlag) => {
+        try {
+          const useGrid = (typeof customGridFlag === 'boolean') ? customGridFlag : drawGrid;
+          tool7StatusText.innerText = `📸 Đang chụp và gửi ảnh...`;
+          
+          try {
+            if (tool7UrlInput && document.activeElement !== tool7UrlInput) {
+              tool7UrlInput.value = tool7Webview.getURL() || '';
+            }
+          } catch(e) {}
+
+          const capturePromise = tool7Webview.capturePage();
+          const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Capture Timeout')), 3000));
+          const nativeImg = await Promise.race([capturePromise, timeoutPromise]).catch(() => null);
+
+          if (nativeImg) {
+            const compositeDataUrl = await compositeImageWithCaroGrid(nativeImg, useGrid);
+            tool7StatusText.innerText = `🚀 Đang dán và gửi ảnh...`;
+
+            wvMessenger.focus();
+            if (window.electronAPI && window.electronAPI.pasteAndSendImage) {
+              window.electronAPI.pasteAndSendImage(compositeDataUrl, wvMessenger.getWebContentsId());
+            }
+
+            tool7StatusText.innerText = `✅ Đã thực thi xong & gửi ảnh!`;
+          } else {
+            tool7StatusText.innerText = `⚠️ Không thể chụp ảnh trang web lúc này!`;
+          }
+        } catch (err) {
+          console.error('[Tool 7] Lỗi chụp ảnh:', err);
+          tool7StatusText.innerText = `❌ Lỗi: ${err.message}`;
+        }
+      };
+
+      try {
+        for (let stepIndex = 0; stepIndex < steps.length; stepIndex++) {
+          const step = steps[stepIndex];
+          const isLastStep = (stepIndex === steps.length - 1);
+          const stepPrefix = steps.length > 1 ? `[${stepIndex + 1}/${steps.length}] ` : '';
+
+          const action = step.action || 'open_url';
+          const url = step.url || '';
+          const coord = step.coord || '';
+          const fromCoord = step.from || '';
+          const toCoord = step.to || '';
+          const textToType = step.text || '';
+          const count = step.count || 1;
+
+          console.log(`[Host Tool 7] ⚡ Thực thi bước ${stepIndex + 1}/${steps.length}: ${action}`, step);
+          markTool7UserAction();
+
+          // 1. CLICK TỌA ĐỘ (/a2, /k22)
+          if (action === 'click_coord' && coord) {
+            const pt = coordToPixel(coord);
+            if (pt) {
+              tool7StatusText.innerText = `${stepPrefix}🎯 Đang click tọa độ ${coord}...`;
+              tool7Webview.sendInputEvent({ type: 'mouseMove', x: pt.x, y: pt.y });
+              tool7Webview.sendInputEvent({ type: 'mouseDown', x: pt.x, y: pt.y, button: 'left', clickCount: 1 });
+              tool7Webview.sendInputEvent({ type: 'mouseUp', x: pt.x, y: pt.y, button: 'left', clickCount: 1 });
+
+              await tool7Webview.executeJavaScript(`
+                (() => {
+                  const el = document.elementFromPoint(${pt.x}, ${pt.y});
+                  if (el) {
+                    el.focus();
+                    el.click();
+                  }
+                })()
+              `).catch(() => {});
+
+              await new Promise(r => setTimeout(r, isLastStep ? 600 : 350));
+            } else {
+              tool7StatusText.innerText = `${stepPrefix}⚠️ Tọa độ ${coord} không hợp lệ!`;
+            }
+          }
+
+          // 2. SCROLL DRAG (/a2-w2)
+          else if (action === 'scroll_drag' && fromCoord && toCoord) {
+            const p1 = coordToPixel(fromCoord);
+            const p2 = coordToPixel(toCoord);
+
+            if (p1 && p2) {
+              tool7StatusText.innerText = `${stepPrefix}📜 Đang lướt từ ${fromCoord} đến ${toCoord}...`;
+              const deltaX = p2.x - p1.x;
+              const deltaY = p2.y - p1.y;
+
+              tool7Webview.sendInputEvent({
+                type: 'mouseWheel',
+                x: p1.x,
+                y: p1.y,
+                deltaX: -deltaX,
+                deltaY: -deltaY,
+                wheelTicksX: -deltaX / 100,
+                wheelTicksY: -deltaY / 100
+              });
+
+              await tool7Webview.executeJavaScript(`
+                (() => {
+                  window.scrollBy({ left: ${-deltaX}, top: ${-deltaY}, behavior: 'smooth' });
+                })()
+              `).catch(() => {});
+
+              await new Promise(r => setTimeout(r, isLastStep ? 800 : 500));
+            }
+          }
+
+          // 3. GÕ VĂN BẢN (/[nội dung])
+          else if (action === 'type_text' && textToType) {
+            tool7StatusText.innerText = `${stepPrefix}⌨️ Đang gõ: "${textToType}"...`;
+            try {
+              if (typeof tool7Webview.insertText === 'function') {
+                tool7Webview.insertText(textToType);
+              } else {
+                for (const char of textToType) {
+                  tool7Webview.sendInputEvent({ type: 'char', keyCode: char });
+                }
+              }
+            } catch (e) {
+              for (const char of textToType) {
+                tool7Webview.sendInputEvent({ type: 'char', keyCode: char });
+              }
+            }
+            await new Promise(r => setTimeout(r, isLastStep ? 500 : 300));
+          }
+
+          // 4. XÓA LÙI BACKSPACE (/![delete]xN)
+          else if (action === 'press_backspace') {
+            const deleteCount = Math.max(1, Math.min(100, count));
+            tool7StatusText.innerText = `${stepPrefix}⌫ Đang xóa lùi ${deleteCount} ký tự...`;
+
+            for (let i = 0; i < deleteCount; i++) {
+              tool7Webview.sendInputEvent({ type: 'keyDown', keyCode: 'Backspace' });
+              tool7Webview.sendInputEvent({ type: 'keyUp', keyCode: 'Backspace' });
+            }
+
+            await tool7Webview.executeJavaScript(`
+              (() => {
+                const active = document.activeElement || document.querySelector('input:focus, textarea:focus, [contenteditable="true"]:focus');
+                if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
+                  const start = active.selectionStart;
+                  const end = active.selectionEnd;
+                  if (start === end && start > 0) {
+                    const val = active.value;
+                    const newPos = Math.max(0, start - ${deleteCount});
+                    active.value = val.slice(0, newPos) + val.slice(end);
+                    active.selectionStart = active.selectionEnd = newPos;
+                  } else if (start !== end) {
+                    const val = active.value;
+                    active.value = val.slice(0, start) + val.slice(end);
+                    active.selectionStart = active.selectionEnd = start;
+                  }
+                  active.dispatchEvent(new Event('input', { bubbles: true }));
+                  active.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+              })()
+            `).catch(() => {});
+
+            await new Promise(r => setTimeout(r, isLastStep ? 450 : 250));
+          }
+
+          // 5. NHẤN PHÍM ENTER (/![enter])
+          else if (action === 'press_enter') {
+            tool7StatusText.innerText = `${stepPrefix}↵ Đang nhấn phím Enter...`;
+
+            tool7Webview.sendInputEvent({ type: 'keyDown', keyCode: 'Enter' });
+            tool7Webview.sendInputEvent({ type: 'char', keyCode: 'Enter' });
+            tool7Webview.sendInputEvent({ type: 'keyUp', keyCode: 'Enter' });
+
+            tool7Webview.executeJavaScript(`
+              (() => {
+                const active = document.activeElement;
+                if (active) {
+                  const form = active.closest('form');
+                  if (form) {
+                    if (form.requestSubmit) form.requestSubmit();
+                    else form.submit();
+                  }
+                }
+              })()
+            `).catch(() => {});
+
+            // Chờ tải kết quả tìm kiếm / form submit
+            await new Promise((resolve) => {
+              let isDone = false;
+              const onStop = () => {
+                if (!isDone) {
+                  isDone = true;
+                  tool7Webview.removeEventListener('did-stop-loading', onStop);
+                  setTimeout(resolve, 800);
+                }
+              };
+              tool7Webview.addEventListener('did-stop-loading', onStop, { once: true });
+              setTimeout(onStop, 1800);
+            });
+          }
+
+          // 6. DÒ TÌM THANH NHẬP LIỆU (/find)
+          else if (action === 'find_input') {
+            tool7StatusText.innerText = `${stepPrefix}🔍 Đang dò tìm thanh nhập liệu trên trang...`;
+
+            try {
+              const findResult = await tool7Webview.executeJavaScript(`
+                (() => {
+                  const selectors = [
+                    'input[type="search"]',
+                    'input[name*="search" i]',
+                    'input[name*="q" i]',
+                    'input[name*="query" i]',
+                    'input[placeholder*="search" i]',
+                    'input[placeholder*="tìm" i]',
+                    'input[aria-label*="search" i]',
+                    'input[aria-label*="tìm" i]',
+                    '[role="searchbox"]',
+                    '[role="search"] input',
+                    'form[action*="search" i] input',
+                    'input[type="text"]',
+                    'textarea',
+                    '[contenteditable="true"]',
+                    '[role="textbox"]',
+                    'input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="image"])'
+                  ];
+
+                  let foundEl = null;
+                  for (const sel of selectors) {
+                    const els = Array.from(document.querySelectorAll(sel));
+                    for (const el of els) {
+                      const rect = el.getBoundingClientRect();
+                      const style = window.getComputedStyle(el);
+                      if (rect.width > 20 && rect.height > 10 && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0') {
+                        foundEl = el;
+                        break;
+                      }
+                    }
+                    if (foundEl) break;
+                  }
+
+                  if (foundEl) {
+                    foundEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    foundEl.focus();
+                    foundEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, view: window }));
+                    foundEl.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window }));
+                    foundEl.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+                    const r = foundEl.getBoundingClientRect();
+                    return {
+                      found: true,
+                      x: Math.round(r.left + r.width / 2),
+                      y: Math.round(r.top + r.height / 2)
+                    };
+                  }
+                  return { found: false };
+                })()
+              `).catch(() => ({ found: false }));
+
+              if (findResult && findResult.found) {
+                tool7Webview.sendInputEvent({ type: 'mouseDown', x: findResult.x, y: findResult.y, button: 'left', clickCount: 1 });
+                tool7Webview.sendInputEvent({ type: 'mouseUp', x: findResult.x, y: findResult.y, button: 'left', clickCount: 1 });
+                tool7StatusText.innerText = `${stepPrefix}🎯 Đã click vào thanh nhập liệu!`;
+              } else {
+                tool7StatusText.innerText = `${stepPrefix}⚠️ Không tìm thấy thanh nhập liệu trên trang!`;
+              }
+            } catch (err) {
+              tool7StatusText.innerText = `${stepPrefix}❌ Lỗi tìm thanh nhập liệu: ${err.message}`;
+            }
+
+            await new Promise(r => setTimeout(r, isLastStep ? 500 : 300));
+          }
+
+          // 7.0. TRÍCH XUẤT N ẢNH TỪ WEB TĨNH ĐƠN GIẢN (/##n) - GIẢ LẬP CHUỘT PHẢI LƯU ẢNH VÀ ĐỔI SANG JPG
+          else if (action === 'extract_static_images') {
+            shouldCaptureAndSend = false;
+            const targetCount = Math.max(1, Math.min(50, count));
+            tool7StatusText.innerText = `${stepPrefix}🔍 [Lưu ảnh /##n] Đang dò tìm ảnh trên trang... (Mục tiêu: ${targetCount} ảnh)`;
+
+            try {
+              const currentPageUrl = tool7Webview.getURL() || '';
+              let downloadedImages = [];
+              const processedUrlSet = new Set();
+              let scanRound = 0;
+              const maxRounds = 15;
+
+              while (downloadedImages.length < targetCount && scanRound < maxRounds) {
+                scanRound++;
+                tool7StatusText.innerText = `${stepPrefix}📸 [Lưu ảnh /##n] Đang quét ảnh chất lượng cao (Đã lấy: ${downloadedImages.length}/${targetCount} ảnh)...`;
+
+                // Bước 1: Quét toàn bộ DOM để tìm các thẻ ảnh thật (img, figure, [data-image-url], picture, canvas)
+                const candList = await tool7Webview.executeJavaScript(`
+                  (function() {
+                    const blacklistRegex = /(?:[_\\-\\/\\b]|^)(?:avatar|profile|user|creator|logo|icon|badge|sprite|emoji|favicon|header|footer|button|search-guide|tracking|placeholder|blank|banner|ads|ad|advertisement|sponsor|widget|75x75|140x140|30x30|60x60|50x50)(?:[_\\-\\/\\b]|\\.|\\?|$)|bn\\.png|\\.svg|\\.gif/i;
+
+                    function isPlaceholder(u) {
+                      if (!u || typeof u !== 'string') return true;
+                      if (u.startsWith('data:image/svg') || u.startsWith('data:image/gif')) return true;
+                      if (u.startsWith('data:image/png;base64,iVBORw0KGgo')) return true;
+                      if (u.length < 30 && u.startsWith('data:')) return true;
+                      return false;
+                    }
+
+                    // Kích hoạt tất cả ảnh lazyload (litespeed, wordpress, lozad)
+                    try {
+                      document.querySelectorAll('img[data-src], img[data-original], img[data-url], img[data-lazy-src], img[data-high-res-src], img[data-lazyloaded]').forEach(img => {
+                        const real = img.getAttribute('data-src') || img.getAttribute('data-original') || img.getAttribute('data-url') || img.getAttribute('data-lazy-src') || img.getAttribute('data-high-res-src');
+                        if (real && (!img.src || isPlaceholder(img.src))) {
+                          img.src = real;
+                        }
+                      });
+                    } catch(e) {}
+
+                    const list = [];
+                    const seen = new Set();
+
+                    // Tìm tất cả các thẻ chứa ảnh
+                    const allEls = Array.from(document.querySelectorAll('img, [data-image-url], picture source, figure img, figure.wp-caption img, .entry-content img, .post-content img, article img, div[role="listitem"] img, [data-test-id="pin"] img, [data-test-id="pinWrapper"] img, canvas'));
+
+                    for (let el of allEls) {
+                      // Loại trừ container header / avatar
+                      if (el.closest) {
+                        const parent = el.closest('header, nav, footer, aside, [role="banner"], [role="navigation"], [data-test-id*="avatar"], .header, .nav, .avatar, .user-profile, .advertisement, .sidebar, .qc, .quangcao');
+                        if (parent) continue;
+                      }
+
+                      let src = '';
+                      let widthHint = 0;
+
+                      // 1. Kiểm tra data-image-url (WordPress reaction wrapper)
+                      if (el.getAttribute && el.getAttribute('data-image-url')) {
+                        src = el.getAttribute('data-image-url');
+                      }
+                      // 2. Thẻ IMG
+                      else if (el.tagName === 'IMG') {
+                        const srcset = el.getAttribute('data-srcset') || el.getAttribute('srcset') || el.srcset;
+                        if (srcset) {
+                          const parts = srcset.split(',').map(s => s.trim());
+                          for (let p of parts) {
+                            const [sUrl, desc] = p.split(/\\s+/);
+                            if (sUrl && !isPlaceholder(sUrl)) {
+                              let w = 0;
+                              if (desc && desc.endsWith('w')) w = parseInt(desc, 10);
+                              if (w >= widthHint) { widthHint = w; src = sUrl; }
+                            }
+                          }
+                        }
+
+                        if (!src || isPlaceholder(src)) {
+                          src = el.getAttribute('data-src') || el.getAttribute('data-original') || el.getAttribute('data-url') || el.getAttribute('data-high-res-src') || el.src || el.currentSrc || '';
+                        }
+                      } 
+                      // 3. Thẻ SOURCE
+                      else if (el.tagName === 'SOURCE') {
+                        src = el.getAttribute('data-srcset') || el.getAttribute('srcset') || '';
+                        if (src) src = src.split(',')[0].trim().split(' ')[0];
+                      } 
+                      // 4. Background Image
+                      else if (el.style && el.style.backgroundImage) {
+                        const m = el.style.backgroundImage.match(/url\\(["']?(.*?)["']?\\)/);
+                        if (m) src = m[1];
+                      } 
+                      // 5. Thẻ CANVAS
+                      else if (el.tagName === 'CANVAS') {
+                        if (el.width >= 100 && el.height >= 100) {
+                          try {
+                            const dUrl = el.toDataURL('image/jpeg', 0.95);
+                            if (dUrl && dUrl.length > 500) {
+                              list.push({ url: 'canvas_' + list.length, dataUrl: dUrl });
+                              continue;
+                            }
+                          } catch(e) {}
+                        }
+                      }
+
+                      if (!src || isPlaceholder(src) || blacklistRegex.test(src)) continue;
+
+                      // Chuẩn hóa URL
+                      if (src.startsWith('//')) src = window.location.protocol + src;
+                      else if (src.startsWith('/')) src = window.location.origin + src;
+
+                      const key = src.split('?')[0].toLowerCase();
+                      if (seen.has(key)) continue;
+                      seen.add(key);
+
+                      list.push({ url: src, dataUrl: null });
+                    }
+
+                    return list;
+                  })();
+                `).catch(() => []);
+
+                console.log(`[Tool 7 Static Scraper /##n] Round ${scanRound}: Tìm thấy ${candList.length} ứng viên ảnh`);
+
+                if (candList && candList.length > 0) {
+                  for (let cand of candList) {
+                    if (downloadedImages.length >= targetCount) break;
+                    const normUrl = (cand.url || '').split('?')[0].toLowerCase();
+                    if (processedUrlSet.has(normUrl)) continue;
+                    processedUrlSet.add(normUrl);
+
+                    tool7StatusText.innerText = `${stepPrefix}💾 [Lưu ảnh /##n] Đang lưu ảnh #${downloadedImages.length + 1}/${targetCount}...`;
+
+                    // GIẢ LẬP LƯU ẢNH TRỰC TIẾP (Right-click Save Image):
+                    // Trích xuất buffer/dataUrl của ảnh với 100% độ phân giải gốc, tự động đổi WebP sang JPG
+                    const converted = await tool7Webview.executeJavaScript(`
+                      (async function() {
+                        const u = ${JSON.stringify(cand.url)};
+                        const directData = ${JSON.stringify(cand.dataUrl)};
+                        if (directData) return { url: u, dataUrl: directData };
+
+                        try {
+                          // 1. Thử lấy trực tiếp từ thẻ <img> trong DOM nếu đã có sẵn
+                          const imgs = Array.from(document.querySelectorAll('img')).filter(img => (img.src === u || img.getAttribute('data-src') === u || img.currentSrc === u));
+                          for (let el of imgs) {
+                            const nw = el.naturalWidth || el.width || 0;
+                            const nh = el.naturalHeight || el.height || 0;
+                            if (nw >= 80 && nh >= 80) {
+                              try {
+                                const canvas = document.createElement('canvas');
+                                canvas.width = nw;
+                                canvas.height = nh;
+                                const ctx = canvas.getContext('2d');
+                                ctx.drawImage(el, 0, 0, nw, nh);
+                                const dUrl = canvas.toDataURL('image/jpeg', 0.95);
+                                if (dUrl && dUrl.length > 500) {
+                                  return { url: u, dataUrl: dUrl };
+                                }
+                              } catch(e) {}
+                            }
+                          }
+
+                          // 2. Fetch blob trực tiếp qua Session trình duyệt và giải mã Bitmap 100% gốc
+                          const res = await fetch(u);
+                          if (res.ok) {
+                            const blob = await res.blob();
+                            const bmp = await createImageBitmap(blob);
+                            if (bmp.width >= 80 && bmp.height >= 80) {
+                              const canvas = document.createElement('canvas');
+                              canvas.width = bmp.width;
+                              canvas.height = bmp.height;
+                              const ctx = canvas.getContext('2d');
+                              ctx.drawImage(bmp, 0, 0);
+                              return { url: u, dataUrl: canvas.toDataURL('image/jpeg', 0.95) };
+                            }
+                          }
+                        } catch(e) {}
+
+                        return { url: u, dataUrl: null };
+                      })();
+                    `).catch(() => null);
+
+                    const finalDataUrl = (converted && converted.dataUrl) ? converted.dataUrl : null;
+                    const finalUrl = (converted && converted.url) ? converted.url : cand.url;
+
+                    if (finalDataUrl || finalUrl) {
+                      const saved = await window.electronAPI.downloadWebImages([
+                        { url: finalUrl, dataUrl: finalDataUrl }
+                      ], 1, currentPageUrl);
+
+                      if (saved && saved.length > 0) {
+                        downloadedImages.push(saved[0]);
+                        console.log(`[Tool 7 Static Scraper /##n] ✅ Đã lưu file JPG ảnh MỚI #${downloadedImages.length}/${targetCount}`);
+                      }
+                    }
+                  }
+                }
+
+                // Nếu chưa đủ số lượng, tự động cuộn trang xuống để nạp thêm ảnh
+                if (downloadedImages.length < targetCount) {
+                  await tool7Webview.executeJavaScript(`window.scrollBy({ top: 1500, behavior: 'smooth' });`).catch(() => {});
+                  await new Promise(r => setTimeout(r, 600));
+                }
+              }
+
+              // Bước 2: Gửi tuần tự toàn bộ N ảnh lên Messenger
+              if (downloadedImages && downloadedImages.length > 0) {
+                console.log(`[Tool 7 Static Scraper /##n] Đang gửi tuần tự ${downloadedImages.length} ảnh vào Messenger...`);
+                let sentCount = 0;
+                for (let i = 0; i < downloadedImages.length; i++) {
+                  const dataUrl = downloadedImages[i];
+                  tool7StatusText.innerText = `${stepPrefix}🚀 [Gửi ảnh /##n] Đang gửi ảnh (${i + 1}/${downloadedImages.length}) lên Messenger...`;
+                  if (wvMessenger) {
+                    wvMessenger.focus();
+                  }
+                  if (window.electronAPI && window.electronAPI.pasteAndSendImageAsync) {
+                    const targetWcId = wvMessenger ? wvMessenger.getWebContentsId() : null;
+                    const ok = await window.electronAPI.pasteAndSendImageAsync(dataUrl, targetWcId);
+                    if (ok) sentCount++;
+                  }
+                  await new Promise(r => setTimeout(r, 800));
+                }
+                tool7StatusText.innerText = `${stepPrefix}✅ [Lưu ảnh /##n] Đã lưu vào local data và gửi thành công ${sentCount}/${downloadedImages.length} ảnh lên Messenger!`;
+              } else {
+                tool7StatusText.innerText = `${stepPrefix}⚠️ [Lưu ảnh /##n] Không tìm thấy ảnh phù hợp trên trang! (Gõ /#clear để làm mới bộ nhớ)`;
+              }
+            } catch (err) {
+              console.error('[Tool 7 Static Scraper Error]:', err);
+              tool7StatusText.innerText = `${stepPrefix}❌ Lỗi lấy ảnh: ${err.message}`;
+            }
+          }
+
+          // 7.1. TRÍCH XUẤT N ẢNH TỪ TRANG WEB BẢO MẬT/DYNAMIC (/#n)
+          else if (action === 'extract_images') {
+            shouldCaptureAndSend = false;
+            const targetCount = Math.max(1, Math.min(50, count));
+            tool7StatusText.innerText = `${stepPrefix}🔍 Đang quét danh sách ảnh trên trang... (Mục tiêu: ${targetCount} ảnh)`;
+
+            try {
+              const currentPageUrl = tool7Webview.getURL() || '';
+
+              let downloadedImages = [];
+              const processedUrlSet = new Set();
+              let scanRound = 0;
+              const maxRounds = 20;
+
+              while (downloadedImages.length < targetCount && scanRound < maxRounds) {
+                scanRound++;
+                tool7StatusText.innerText = `${stepPrefix}🔍 Đang quét & lọc ảnh thông minh (Đã lấy: ${downloadedImages.length}/${targetCount} ảnh)...`;
+
+                // Bước 1: Kích hoạt toàn bộ ảnh lazyload trong DOM và lấy danh sách URL chính xác
+                const domResult = await tool7Webview.executeJavaScript(`
+                  (function() {
+                    const blacklistRegex = /(?:[_\\-\\/\\b]|^)(?:avatar|profile|user|creator|logo|icon|badge|sprite|emoji|favicon|header|footer|button|search-guide|tracking|placeholder|blank|banner|ads|ad|advertisement|sponsor|widget|75x75|140x140|30x30|60x60|50x50)(?:[_\\-\\/\\b]|\\.|\\?|$)|bn\\.png|\\.svg|\\.gif/i;
+
+                    function isPlaceholder(u) {
+                      if (!u || typeof u !== 'string') return true;
+                      if (u.startsWith('data:image/svg') || u.startsWith('data:image/gif')) return true;
+                      if (u.startsWith('data:image/png;base64,iVBORw0KGgo')) return true;
+                      if (u.length < 30 && u.startsWith('data:')) return true;
+                      return false;
+                    }
+
+                    try {
+                      document.querySelectorAll('img[data-src], img[data-original], img[data-cdn], img[data-url], img[data-lazy-src], img.lozad, img[data-lazyloaded]').forEach(img => {
+                        const real = img.getAttribute('data-src') || img.getAttribute('data-original') || img.getAttribute('data-cdn') || img.getAttribute('data-url') || img.getAttribute('data-lazy-src');
+                        if (real && (!img.src || isPlaceholder(img.src) || img.src.includes('bn.png'))) {
+                          img.src = real;
+                        }
+                      });
+                    } catch(e) {}
+
+                    const list = [];
+                    const seen = new Set();
+                    
+                    // 1. Quét ưu tiên các thẻ ảnh truyện tranh / reader (theo đúng cấu trúc DevTools)
+                    const readerEls = Array.from(document.querySelectorAll('.reading-detail .page-chapter img, [id^="page_"] img, .reading-detail img, .box_doc img, img.lozad, .chapter-content img, .vung-doc img, .viewer img, .comic-page img, #chapter_body img, .page-chapter img, #page_body img, figure.wp-caption img, figure img'));
+                    
+                    // 2. Quét các trang web thông thường (Pinterest, Pixiv, Twitter, Unsplash, Google, v.v.)
+                    const generalEls = Array.from(document.querySelectorAll('[data-test-id="pin"] img, [data-test-id="pinWrapper"] img, [data-test-id="non-story-pin-image"] img, [data-testid="photo-grid"] img, a[href*="/artworks/"] img, figure img, article img, div[role="listitem"] img, img'));
+                    
+                    const isReader = readerEls.length > 0;
+                    const sourceEls = isReader ? readerEls : generalEls;
+
+                    for (let i = 0; i < sourceEls.length; i++) {
+                      const el = sourceEls[i];
+
+                      // Loại trừ container header, footer, avatar, sidebar quảng cáo (nếu không phải reader)
+                      if (!isReader && el.closest) {
+                        const parentContainer = el.closest('header, nav, footer, aside, [role="banner"], [role="navigation"], [data-test-id*="avatar"], .header, .nav, .avatar, .user-profile, .advertisement, .sidebar, .qc, .quangcao');
+                        if (parentContainer) continue;
+                      }
+
+                      // Kiểm tra kích thước hình học trên màn hình và kích thước ảnh tự nhiên
+                      const rect = el.getBoundingClientRect ? el.getBoundingClientRect() : { left: 0, top: 0, width: 0, height: 0 };
+                      const elW = rect.width || el.clientWidth || 0;
+                      const elH = rect.height || el.clientHeight || 0;
+                      const natW = el.naturalWidth || 0;
+                      const natH = el.naturalHeight || 0;
+
+                      if (!isReader) {
+                        // Loại bỏ icon trên thanh điều hướng đầu trang
+                        if (rect.top < 70 && elW < 140) continue;
+                        // Loại bỏ các ảnh siêu bé (avatar, badge, icon, emoji, tracking pixel)
+                        if (elW > 0 && elH > 0 && (elW < 100 || elH < 100) && natW < 180 && natH < 180) continue;
+                        if (natW > 0 && natH > 0 && (natW < 140 || natH < 140)) continue;
+                      }
+
+                      let src = '';
+                      let widthHint = 0;
+                      const srcset = el.getAttribute('data-srcset') || el.getAttribute('srcset') || el.srcset;
+                      if (srcset) {
+                        const parts = srcset.split(',').map(s => s.trim());
+                        for (let p of parts) {
+                          const [sUrl, desc] = p.split(/\\s+/);
+                          if (sUrl && !isPlaceholder(sUrl)) {
+                            let w = 0;
+                            if (desc && desc.endsWith('w')) w = parseInt(desc, 10);
+                            if (w >= widthHint) { widthHint = w; src = sUrl; }
+                          }
+                        }
+                      }
+                      if (!src || isPlaceholder(src)) {
+                        src = el.src || el.currentSrc || el.getAttribute('data-src') || el.getAttribute('data-original') || el.getAttribute('data-cdn') || el.getAttribute('data-url') || '';
+                      }
+                      
+                      // Bỏ qua URL rỗng, placeholder, hoặc dính blacklist regex (avatar, logo, ads, icon, tracking)
+                      if (!src || isPlaceholder(src) || blacklistRegex.test(src)) continue;
+                      
+                      const key = src.split('?')[0].toLowerCase();
+                      if (seen.has(key)) continue;
+                      seen.add(key);
+                      list.push(src);
+                    }
+                    return { isReader: isReader, urls: list };
+                  })();
+                `).catch(() => ({ isReader: false, urls: [] }));
+
+                const candUrls = (domResult && domResult.urls) ? domResult.urls : [];
+                const isReaderMode = domResult ? domResult.isReader : false;
+
+                if (candUrls && candUrls.length > 0) {
+                  for (let candUrl of candUrls) {
+                    if (downloadedImages.length >= targetCount) break;
+                    const normUrl = candUrl.split('?')[0].toLowerCase();
+                    if (processedUrlSet.has(normUrl)) continue;
+                    processedUrlSet.add(normUrl);
+
+                    tool7StatusText.innerText = `${stepPrefix}📸 Đang lưu ảnh gốc (${downloadedImages.length + 1}/${targetCount})...`;
+
+                    // Chuyển đổi trực tiếp qua fetch + createImageBitmap trong webview
+                    const converted = await tool7Webview.executeJavaScript(`
+                      (async function() {
+                        const u = ${JSON.stringify(candUrl)};
+                        const isReader = ${isReaderMode};
+                        try {
+                          // 1. Thử lấy từ thẻ img đã render sẵn trong DOM
+                          const imgs = Array.from(document.querySelectorAll('img')).filter(img => (img.src === u || img.getAttribute('data-src') === u));
+                          for (const el of imgs) {
+                            const nw = el.naturalWidth || el.width || 0;
+                            const nh = el.naturalHeight || el.height || 0;
+                            if (nw >= 80 && nh >= 80) {
+                              if (!isReader && (nw < 150 || nh < 150)) continue;
+                              const canvas = document.createElement('canvas');
+                              canvas.width = nw;
+                              canvas.height = nh;
+                              const ctx = canvas.getContext('2d');
+                              ctx.drawImage(el, 0, 0, nw, nh);
+                              return { url: u, dataUrl: canvas.toDataURL('image/jpeg', 0.95) };
+                            }
+                          }
+
+                          // 2. Fetch blob trực tiếp và decode bitmap 100% full resolution
+                          const res = await fetch(u);
+                          if (res.ok) {
+                            const blob = await res.blob();
+                            const bmp = await createImageBitmap(blob);
+                            if (bmp.width >= 80 && bmp.height >= 80) {
+                              if (!isReader && (bmp.width < 150 || bmp.height < 150)) return { url: u, dataUrl: null };
+                              const canvas = document.createElement('canvas');
+                              canvas.width = bmp.width;
+                              canvas.height = bmp.height;
+                              const ctx = canvas.getContext('2d');
+                              ctx.drawImage(bmp, 0, 0);
+                              return { url: u, dataUrl: canvas.toDataURL('image/jpeg', 0.95) };
+                            }
+                          }
+                        } catch(e) {}
+                        return { url: u, dataUrl: null };
+                      })();
+                    `).catch(() => null);
+
+                    if (converted && converted.dataUrl) {
+                      const saved = await window.electronAPI.downloadWebImages([
+                        { url: converted.url, dataUrl: converted.dataUrl }
+                      ], 1, currentPageUrl);
+
+                      if (saved && saved.length > 0) {
+                        downloadedImages.push(saved[0]);
+                        console.log(`[Tool 7 Image Scraper] ✅ Đã lưu file JPG ảnh MỚI #${downloadedImages.length}/${targetCount}`);
+                      }
+                    }
+                  }
+                }
+
+                // Nếu chưa đủ số lượng, tự động cuộn trang xuống để load thêm DOM mới (lozad, infinite scroll)
+                if (downloadedImages.length < targetCount) {
+                  await tool7Webview.executeJavaScript(`window.scrollBy({ top: 2000, behavior: 'smooth' });`).catch(() => {});
+                  await new Promise(r => setTimeout(r, 600));
+                }
+              }
+
+              // Bước 2: Gửi tuần tự toàn bộ N ảnh lên Messenger
+              if (downloadedImages && downloadedImages.length > 0) {
+                console.log(`[Tool 7 Image Scraper] Đang gửi tuần tự ${downloadedImages.length} ảnh vào Messenger...`);
+                let sentCount = 0;
+                for (let i = 0; i < downloadedImages.length; i++) {
+                  const dataUrl = downloadedImages[i];
+                  tool7StatusText.innerText = `${stepPrefix}🚀 Đang gửi ảnh (${i + 1}/${downloadedImages.length}) lên Messenger...`;
+                  if (wvMessenger) {
+                    wvMessenger.focus();
+                  }
+                  if (window.electronAPI && window.electronAPI.pasteAndSendImageAsync) {
+                    const targetWcId = wvMessenger ? wvMessenger.getWebContentsId() : null;
+                    const ok = await window.electronAPI.pasteAndSendImageAsync(dataUrl, targetWcId);
+                    if (ok) sentCount++;
+                  }
+                  await new Promise(r => setTimeout(r, 800));
+                }
+                tool7StatusText.innerText = `${stepPrefix}✅ Đã lưu vào data và gửi thành công ${sentCount}/${downloadedImages.length} ảnh lên Messenger!`;
+              } else {
+                tool7StatusText.innerText = `${stepPrefix}⚠️ Không tìm thấy ảnh phù hợp trên trang! (Gõ /#clear để làm mới bộ nhớ)`;
+              }
+            } catch (err) {
+              console.error('[Tool 7 Image Scraper Error]:', err);
+              tool7StatusText.innerText = `${stepPrefix}❌ Lỗi lấy ảnh: ${err.message}`;
+            }
+          }
+
+          // 8. XÓA LỊCH SỬ CACHE ẢNH (/#clear)
+          else if (action === 'clear_image_history') {
+            shouldCaptureAndSend = false;
+            try {
+              if (window.electronAPI && window.electronAPI.clearSentImagesHistory) {
+                await window.electronAPI.clearSentImagesHistory();
+              }
+              tool7StatusText.innerText = `${stepPrefix}🧹 Đã xóa sạch 100% lịch sử cache ảnh đã gửi!`;
+            } catch (err) {
+              tool7StatusText.innerText = `${stepPrefix}❌ Lỗi xóa cache: ${err.message}`;
+            }
+          }
+
+          // 8.1. XÓA TOÀN BỘ DỮ LIỆU DUYỆT WEB, COOKIE & CACHE TOOL 7 (/!webdelete)
+          else if (action === 'delete_web_data') {
+            tool7StatusText.innerText = `${stepPrefix}🧹 Đang xóa sạch dữ liệu duyệt web, cookie & cache của Tool 7...`;
+            try {
+              if (window.electronAPI && window.electronAPI.clearTool7WebData) {
+                await window.electronAPI.clearTool7WebData();
+              }
+              try {
+                tool7Webview.loadURL('https://www.google.com/');
+              } catch(e) {}
+              tool7StatusText.innerText = `${stepPrefix}✨ Đã xóa sạch 100% dữ liệu duyệt web & cookie của Tool 7!`;
+            } catch (err) {
+              tool7StatusText.innerText = `${stepPrefix}❌ Lỗi xóa dữ liệu web: ${err.message}`;
+            }
+            await new Promise(r => setTimeout(r, 1200));
+          }
+
+          // 9. CHỤP ẢNH SẠCH (/!cap)
+          else if (action === 'capture_clean') {
+            drawGrid = false;
+          }
+
+          // 10. CHỤP ẢNH LƯỚI (/cap)
+          else if (action === 'capture_only') {
+            drawGrid = true;
+          }
+
+          // 11. F5 RELOAD (/web!reset)
+          else if (action === 'reset') {
+            tool7StatusText.innerText = `${stepPrefix}🔄 Đang F5 tải lại trang...`;
+            try { tool7Webview.reload(); } catch(e) {}
+            await new Promise(resolve => {
+              const onStop = () => {
+                tool7Webview.removeEventListener('did-stop-loading', onStop);
+                setTimeout(resolve, 800);
+              };
+              tool7Webview.addEventListener('did-stop-loading', onStop, { once: true });
+              setTimeout(onStop, 2500);
+            });
+          }
+
+          // 12. BACK (/web!<)
+          else if (action === 'back') {
+            tool7StatusText.innerText = `${stepPrefix}⬅️ Đang quay lại...`;
+            if (tool7Webview.canGoBack()) tool7Webview.goBack();
+            await new Promise(r => setTimeout(r, 1000));
+          }
+
+          // 13. FORWARD (/web!>)
+          else if (action === 'forward') {
+            tool7StatusText.innerText = `${stepPrefix}➡️ Đang đi tới...`;
+            if (tool7Webview.canGoForward()) tool7Webview.goForward();
+            await new Promise(r => setTimeout(r, 1000));
+          }
+
+          // 14. MỞ URL (/web:<url>)
+          else if (action === 'open_url' && url) {
+            navigateTool7ToUrl(url);
+
+            await new Promise((resolve) => {
+              let isLoaded = false;
+              const onStop = () => {
+                if (!isLoaded) {
+                  isLoaded = true;
+                  tool7Webview.removeEventListener('did-stop-loading', onStop);
+                  setTimeout(resolve, 1000);
+                }
+              };
+              tool7Webview.addEventListener('did-stop-loading', onStop, { once: true });
+              setTimeout(onStop, 3500);
+            });
+          }
+        } // Kết thúc vòng lặp chuỗi lệnh
+
+        // Sau khi hoàn thành tất cả các bước trong chuỗi lệnh:
+        if (shouldCaptureAndSend) {
+          await performCaptureAndSend(drawGrid);
+        }
+      } catch (globalErr) {
+        console.error('[Tool 7 Chain Execution Error]:', globalErr);
+        tool7StatusText.innerText = `❌ Lỗi chuỗi lệnh: ${globalErr.message}`;
+      } finally {
+        setTimeout(() => { isProcessingTool7Command = false; }, 800);
+      }
+    }
+
+    // Lắng nghe tín hiệu trực tiếp từ Lõi Main Process
+    if (window.electronAPI && window.electronAPI.onTool7ExecuteWebFlow) {
+      window.electronAPI.onTool7ExecuteWebFlow((data) => {
+        executeWebFlow(data);
+      });
+    }
+
+    // Khi webview Messenger load xong, đồng bộ lại trạng thái Tool 7 & Cảm biến viền Neon
+    wvMessenger.addEventListener('dom-ready', () => {
+      const isT7On = subtool8Btn.classList.contains('active-toggle');
+      try {
+        wvMessenger.send('tool7-toggle-state', isT7On);
+      } catch(e) {}
+
+      const subtoolSensor = document.getElementById('subtool-sensor');
+      const isSensorOn = subtoolSensor ? subtoolSensor.classList.contains('active-toggle') : true;
+      try {
+        wvMessenger.send('sensor-toggle-overlay', isSensorOn);
+      } catch(e) {}
+    });
+  </script>
+</body>
+</html>

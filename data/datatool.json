@@ -1,0 +1,43 @@
+{
+  "scheduler": {
+    "loopMode": "once",
+    "blocks": []
+  },
+  "gemini": {
+    "apiKey": "",
+    "defaultModel": "gemini-3.6-flash",
+    "systemPrompt": ""
+  },
+  "webStudio": {
+    "url": "https://www.pinterest.com"
+  },
+  "aiAutoReply": {
+    "apiKey": "",
+    "whoami": "",
+    "discipline": "",
+    "blacklist": "",
+    "currentModel": "gemini-2.5-flash",
+    "autoReadThreads": []
+  },
+  "sensorSettings": {
+    "contactLimit": 7,
+    "blockPopups": true,
+    "blockAutoRedirect": true
+  },
+  "screenLock": {
+    "isLocked": false,
+    "pin": "123456"
+  },
+  "subtoolsState": {
+    "subtool-1": false,
+    "subtool-2": false,
+    "subtool-3": false,
+    "subtool-4": false,
+    "subtool-6": false,
+    "subtool-7": false,
+    "subtool-8": true,
+    "subtool-lock": false,
+    "subtool-sensor": false,
+    "tool7-caro-grid": false
+  }
+}
